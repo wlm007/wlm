@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlm.wlm.dao.SysUserMapper">
+    <select id="findUserListByRoleNo" resultType="com.wlm.wlm.model.SysUser">
+        select u.name, u.age, u.email, u.dept_no, u.role_no
+        from sys_user u
+        <where>
+            <if test="roleNo != '' and roleNo != null">
+                u.role_no = #{roleNo}
+            </if>
+        </where>
+    </select>
+</mapper>
