@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.params.sysUser.SysUserListParams;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -13,10 +14,10 @@ import org.apache.ibatis.annotations.Param;
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
     /**
-     * 获取该角色所有用户
+     * 分页获取角色信息
      * @param page 分页
-     * @param roleNo 角色code
+     * @param params 条件参数
      * @return 用户列表
      */
-    IPage<SysUser> findUserListByRoleNo(Page<SysUser> page, @Param("roleNo") String roleNo);
+    IPage<SysUser> findUserListByRoleNo(Page<SysUser> page, @Param("params") SysUserListParams params);
 }

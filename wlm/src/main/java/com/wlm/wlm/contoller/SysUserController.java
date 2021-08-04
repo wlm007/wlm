@@ -2,7 +2,6 @@ package com.wlm.wlm.contoller;
 
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
-import com.wlm.wlm.model.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserParams;
 import com.wlm.wlm.service.SysUserService;
@@ -41,15 +40,8 @@ public class SysUserController {
     @ApiOperation(value = "获取用户信息")
     @ApiImplicitParam(name = "用户id", value = "id", paramType = "Integer")
     @GetMapping("/getOne/{id}")
-    public ApiResult<SysUser> getUser(@PathVariable Integer id) {
-        if (id != 1) {
-            return new ApiResult<>(500, "参数不正确");
-        }
-        SysUser user = new SysUser();
-        user.setId(1L);
-        user.setAge(1);
-        user.setUsername("傻逼");
-        return new ApiResult<>(user);
+    public ApiResult<SysUserVo> getUser(@PathVariable Integer id) {
+        return new ApiResult<>(sysUserService.getUser(id));
     }
 
     @ApiOperation(value = "获取用户列表")

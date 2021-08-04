@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wlm.wlm.dao.SysUserMapper">
+    <cache/>
     <select id="findUserListByRoleNo" resultType="com.wlm.wlm.model.SysUser">
-        select u.name, u.age, u.email, u.dept_no, u.role_no
-        from sys_user u
+        select username, age, email, dept_no, role_no
+        from sys_user
         <where>
-            <if test="roleNo != '' and roleNo != null">
-                u.role_no = #{roleNo}
+            <if test="params.roleNo != '' and params.roleNo != null">
+                role_no = #{params.roleNo}
+            </if>
+            <if test="params.deptNo != '' and params.deptNo != null">
+                and dept_no = #{params.deptNo}
+            </if>
+            <if test="params.username != '' and params.username != null">
+                and username like concat('%',#{params.username},'%')
+            </if>
+            <if test="params.deptName != '' and params.deptName != null">
+                and dept_no in (select dept_no from sys_dept where dept_name like concat('%',#{params.deptName},'%'))
+            </if>
+            <if test="params.roleName != '' and params.roleName != null">
+                and role_no in (select role_no from sys_role where role_name like concat('%',#{params.roleName},'%'))
             </if>
         </where>
     </select>

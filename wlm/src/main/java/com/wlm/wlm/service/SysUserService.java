@@ -50,7 +50,11 @@ public class SysUserService {
 
     public PageInfoResult<List<SysUserVo>> list(SysUserListParams params) {
         Page<SysUser> page = new Page<>(params.getPageNo(), params.getPageSize());
-        IPage<SysUser> userList = sysUserMapper.findUserListByRoleNo(page, params.getRoleNo());
+        IPage<SysUser> userList = sysUserMapper.findUserListByRoleNo(page, params);
         return new PageInfoResult<>(userList.getTotal(), userList.getRecords().stream().map(SysUserVo::new).collect(Collectors.toList()));
+    }
+
+    public SysUserVo getUser(Integer id) {
+        return new SysUserVo(sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, id)));
     }
 }

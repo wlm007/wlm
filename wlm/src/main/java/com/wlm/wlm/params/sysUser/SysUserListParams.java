@@ -15,4 +15,16 @@ public class SysUserListParams extends PageParam {
 
     @ApiModelProperty("角色编号")
     private String roleNo;
+
+    @ApiModelProperty("部门编号")
+    private String deptNo;
+
+    @ApiModelProperty("用户名")
+    private String username;
+
+    @ApiModelProperty("部门名称")
+    private String deptName;
+
+    @ApiModelProperty("角色名称")
+    private String roleName;
 }
