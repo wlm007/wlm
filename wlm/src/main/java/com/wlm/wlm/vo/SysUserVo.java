@@ -25,6 +25,9 @@ public class SysUserVo {
     @ApiModelProperty("登录token")
     private String token;
 
+    @ApiModelProperty("刷新token")
+    private String refreshToken;
+
     public SysUserVo(SysUser user) {
         this.id = user.getId();
         this.username = user.getUsername();

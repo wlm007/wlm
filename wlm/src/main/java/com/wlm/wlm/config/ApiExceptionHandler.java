@@ -21,6 +21,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ApiResult<String> runtimeException(Exception e) {
-        return new ApiResult<>(e.getMessage());
+        return new ApiResult<>(500, "后端请求错误，请稍后重试");
     }
 }
