@@ -6,10 +6,10 @@ const api = {
     get: (url, params, success) => {
         axios.get(baseUrl + url, params)
         .then(res => {
-            if (res.status === 200 && res.data.code === 200) {
+            if (res.status === 200) {
                 success(res.data);
             } else {
-                MessageBox.alert(res.data.msg);
+                MessageBox.alert(res.statusText);
             }
         })
         .catch(error => {
@@ -22,11 +22,10 @@ const api = {
         };
         axios.post(baseUrl + url, params, config)
         .then(res => {
-            console.log(res)
-            if (res.status === 200 && res.data.code === 200) {
+            if (res.status === 200) {
                 success(res.data);
             } else {
-                MessageBox.alert(res.data.msg);
+                MessageBox.alert(res.statusText);
             }
         })
         .catch(error => {
