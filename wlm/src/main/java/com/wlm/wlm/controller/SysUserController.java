@@ -10,6 +10,7 @@ import com.wlm.wlm.vo.SysUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class SysUserController {
     @ApiOperation(value = "注册")
     @ApiOperationSupport(author = "wlm", order = 1)
     @PostMapping("/register")
-    public ApiResult<SysUserVo> register(@RequestBody SysUserParams params) {
+    public ApiResult<SysUserVo> register(@Validated @RequestBody SysUserParams params) {
         return new ApiResult<>(sysUserService.register(params));
     }
 
