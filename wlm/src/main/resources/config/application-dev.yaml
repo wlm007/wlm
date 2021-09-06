@@ -17,6 +17,16 @@ spring:
     host: 127.0.0.1
     password:
     database: 0
+  # qq邮箱控制发送邮件配置
+  mail:
+    host: smtp.qq.com #发送邮件服务器
+    username: 552116594@qq.com  #发送邮件的邮箱地址
+    password: qarutojvnfbtbegj   #客户端授权码，不是邮箱密码，这个在qq邮箱设置里面自动生成的
+    properties.mail.smtp.port: 465 #端口号465或587
+    from: 552116594@qq.com  # 发送邮件的地址，和上面username一致
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+    properties.mail.smtp.ssl.enable: true
 
 # 开启sql打印
 mybatis-plus:
