@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class SysUserVo {
 
     @ApiModelProperty("自增id")
-    private Long id;
+    private Integer id;
 
     @ApiModelProperty("姓名")
     private String username;

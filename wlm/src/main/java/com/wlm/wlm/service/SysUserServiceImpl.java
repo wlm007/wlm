@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.config.ApiException;
 import com.wlm.wlm.config.PageInfoResult;
+import com.wlm.wlm.dao.SysRoleMapper;
 import com.wlm.wlm.dao.SysUserMapper;
+import com.wlm.wlm.dto.SysUserDto;
+import com.wlm.wlm.model.SysRole;
 import com.wlm.wlm.model.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserParams;
@@ -15,7 +18,12 @@ import com.wlm.wlm.util.Md5Util;
 import com.wlm.wlm.vo.SysUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,14 +35,21 @@ import java.util.stream.Collectors;
  * @date 2021/7/28 17:24
  */
 @Service
-public class SysUserService {
+public class SysUserServiceImpl implements UserDetailsService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
 
     @Autowired
+    private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Transactional(rollbackFor = Exception.class)
     public SysUserVo register(SysUserParams params) {
         // 判断姓名是否存在
         SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
@@ -42,7 +57,7 @@ public class SysUserService {
         if (user != null) {
             throw new ApiException(500, "用户名已存在");
         }
-        String password = Md5Util.keyPassword(params.getPassword());
+        String password = passwordEncoder.encode(params.getPassword());
         SysUser sysUser = new SysUser();
         sysUser.setUsername(params.getUsername());
         sysUser.setPassword(password);
@@ -84,5 +99,17 @@ public class SysUserService {
 
     public SysUserVo getUser(Long id) {
         return new SysUserVo(sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, id)));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, userName));
+        if (user == null) {
+            throw new ApiException(500, "用户不存在");
+        }
+        List<SysRole> roleList = sysRoleMapper.selectList(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleNo, user.getRoleNo()));
+        SysUserDto userDto = new SysUserDto(user);
+        userDto.setRoleList(roleList);
+        return userDto;
     }
 }

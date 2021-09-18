@@ -2,18 +2,14 @@ package com.wlm.wlm.model;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * @author wuliming
  * @date 2021/7/20 14:52
  */
 @Data
-public class SysUser implements Serializable {
+public class SysUser {
 
-    private static final long serialVersionUID = 1L;
-
-    private Long id;
+    private Integer id;
 
     private Integer age;
 

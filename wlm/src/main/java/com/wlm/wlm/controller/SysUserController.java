@@ -5,7 +5,7 @@ import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserParams;
-import com.wlm.wlm.service.SysUserService;
+import com.wlm.wlm.service.SysUserServiceImpl;
 import com.wlm.wlm.vo.SysUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +24,7 @@ import java.util.List;
 public class SysUserController {
 
     @Autowired
-    private SysUserService sysUserService;
+    private SysUserServiceImpl sysUserService;
 
     @ApiOperation(value = "注册")
     @ApiOperationSupport(author = "wlm", order = 1)
@@ -35,7 +35,7 @@ public class SysUserController {
 
     @ApiOperation(value = "登录")
     @ApiOperationSupport(author = "wlm", order = 2)
-    @PostMapping("/login")
+    @PostMapping("/login/demo")
     public ApiResult<SysUserVo> login(@RequestBody SysUserParams params) {
         return new ApiResult<>(sysUserService.login(params));
     }

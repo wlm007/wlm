@@ -15,12 +15,14 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ApiException.class)
     @ResponseBody
     public ApiResult<String> businessException(ApiException e) {
+        e.printStackTrace();
         return new ApiResult<>(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ApiResult<String> runtimeException(Exception e) {
+        e.printStackTrace();
         return new ApiResult<>(500, "后端请求错误，请稍后重试");
     }
 }

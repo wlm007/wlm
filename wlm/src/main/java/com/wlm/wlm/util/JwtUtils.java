@@ -91,7 +91,7 @@ public class JwtUtils {
     }
 
     private static void getUser(SysUser user, Claims claims) {
-        user.setId(Long.valueOf(claims.getSubject()));
+        user.setId(Integer.valueOf(claims.getSubject()));
         user.setDeptNo(claims.get("deptNo").toString());
         user.setRoleNo(claims.get("roleNo").toString());
         user.setUsername(claims.get("username").toString());

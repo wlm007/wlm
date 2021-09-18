@@ -1,4 +1,4 @@
-package com.wlm.wlm.util;
+package com.wlm.wlm.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import javax.mail.internet.MimeMessage;
  */
 @Slf4j
 @Service
-public class MailSendUtil {
+public class MailSendServiceImpl {
 
     @Autowired
     private JavaMailSender javaMailSender;
