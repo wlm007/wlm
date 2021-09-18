@@ -29,11 +29,10 @@ export default {
   },
   methods: {
     register () {
-      const self = this
-      api.sysUser.register('/sysUser/register', self.form, {})
+      api.sysUser.register(this.form, {})
         .then(res => {
-          if (res.code === 200) {
-            self.$router.push('/login')
+          if (res.data.code === 200) {
+            this.$router.push('/login')
           }
         })
         .catch()
