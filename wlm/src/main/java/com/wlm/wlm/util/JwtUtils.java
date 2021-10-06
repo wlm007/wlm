@@ -29,12 +29,12 @@ public class JwtUtils {
     /**
      * token过期时间(小时)
      */
-    public static final int TOKEN_EXPIRE_TIME = 24;
+    public static final int TOKEN_EXPIRE_TIME = 1;
 
     /**
      * refreshToken过期时间(小时)
      */
-    public static final int REFRESH_TOKEN_EXPIRE_TIME = 48;
+    public static final int REFRESH_TOKEN_EXPIRE_TIME = 24;
 
     /**
      * 生成token，附带用户信息

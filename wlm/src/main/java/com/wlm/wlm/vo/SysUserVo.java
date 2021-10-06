@@ -22,6 +22,15 @@ public class SysUserVo {
     @ApiModelProperty("年龄")
     private Integer age;
 
+    @ApiModelProperty("邮箱")
+    private String email;
+
+    @ApiModelProperty("部门编号")
+    private String deptNo;
+
+    @ApiModelProperty("角色编号")
+    private String roleNo;
+
     @ApiModelProperty("登录token")
     private String token;
 
@@ -32,5 +41,8 @@ public class SysUserVo {
         this.id = user.getId();
         this.username = user.getUsername();
         this.age = user.getAge();
+        this.email = user.getEmail();
+        this.deptNo = user.getDeptNo();
+        this.roleNo = user.getRoleNo();
     }
 }

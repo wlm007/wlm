@@ -32,6 +32,7 @@ export default {
       api.sysUser.register(this.form, {})
         .then(res => {
           if (res.data.code === 200) {
+            this.$message('注册成功, 请登录')
             this.$router.push('/login')
           }
         })
@@ -44,7 +45,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 </style>

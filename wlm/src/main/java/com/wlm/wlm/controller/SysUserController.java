@@ -33,17 +33,10 @@ public class SysUserController {
         return new ApiResult<>(sysUserService.register(params));
     }
 
-    @ApiOperation(value = "登录")
-    @ApiOperationSupport(author = "wlm", order = 2)
-    @PostMapping("/login/demo")
-    public ApiResult<SysUserVo> login(@RequestBody SysUserParams params) {
-        return new ApiResult<>(sysUserService.login(params));
-    }
-
     @ApiOperation(value = "获取用户信息")
     @ApiOperationSupport(author = "wlm", order = 3)
     @GetMapping("/getOne/{id}")
-    public ApiResult<SysUserVo> getUser(@PathVariable Long id) {
+    public ApiResult<SysUserVo> getUser(@PathVariable Integer id) {
         return new ApiResult<>(sysUserService.getUser(id));
     }
 

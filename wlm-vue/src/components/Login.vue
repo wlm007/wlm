@@ -31,20 +31,19 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
+    console.log('加载页面')
   },
   methods: {
-    async getUser () {
-      const res = await api.sysUser.getOne(1)
-      console.log(res)
-    },
     async login () {
-      const res = await api.sysUser.login(this.form, {dismissLoading: false})
+      const res = await api.sysUser.login(this.$qs.stringify(this.form), {
+        dismissLoading: false,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
       if (res.data.code === 200) {
         sessionStorage.setItem('user', JSON.stringify(res.data.data))
         this.$router.push('/index')
-      } else {
-        this.$message.error(res.data.msg)
       }
     },
     toRegister () {

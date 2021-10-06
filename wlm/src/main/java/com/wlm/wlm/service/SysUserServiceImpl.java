@@ -1,6 +1,5 @@
 package com.wlm.wlm.service;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,10 +13,9 @@ import com.wlm.wlm.model.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserParams;
 import com.wlm.wlm.util.JwtUtils;
-import com.wlm.wlm.util.Md5Util;
+import com.wlm.wlm.util.StringUtils;
 import com.wlm.wlm.vo.SysUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -46,8 +42,6 @@ public class SysUserServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @Transactional(rollbackFor = Exception.class)
     public SysUserVo register(SysUserParams params) {
@@ -57,7 +51,7 @@ public class SysUserServiceImpl implements UserDetailsService {
         if (user != null) {
             throw new ApiException(500, "用户名已存在");
         }
-        String password = passwordEncoder.encode(params.getPassword());
+        String password = passwordEncoder.encode(StringUtils.isNotEmpty(params.getPassword()) ? params.getPassword() : "123456");
         SysUser sysUser = new SysUser();
         sysUser.setUsername(params.getUsername());
         sysUser.setPassword(password);
@@ -67,43 +61,28 @@ public class SysUserServiceImpl implements UserDetailsService {
         return result;
     }
 
-    public SysUserVo login(SysUserParams params) {
-        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getUsername, params.getUsername()));
-        if (user == null) {
-            throw new ApiException("该用户不存在");
-        } else {
-            if (params.getPassword() != null && !Md5Util.keyPassword(params.getPassword()).equals(user.getPassword())) {
-                throw new ApiException("密码错误，请重新输入");
-            }
-        }
-        SysUserVo result = new SysUserVo(user);
-        String token = JwtUtils.generateToken(user);
-        result.setToken(token);
-        //生成新的refreshToken
-        String refreshToken = UUID.randomUUID().toString();
-        //数据放入redis
-        stringRedisTemplate.opsForHash().put(refreshToken, "token", token);
-        stringRedisTemplate.opsForHash().put(refreshToken, "userInfo", JSON.toJSONString(user));
-        //设置token的过期时间
-        stringRedisTemplate.expire(refreshToken, JwtUtils.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.HOURS);
-        result.setRefreshToken(refreshToken);
-        return result;
-    }
-
     public PageInfoResult<List<SysUserVo>> list(SysUserListParams params) {
         Page<SysUser> page = new Page<>(params.getPageNo(), params.getPageSize());
         IPage<SysUser> userList = sysUserMapper.findUserListByRoleNo(page, params);
         return new PageInfoResult<>(userList.getTotal(), userList.getRecords().stream().map(SysUserVo::new).collect(Collectors.toList()));
     }
 
-    public SysUserVo getUser(Long id) {
+    public SysUserVo getUser(Integer id) {
         return new SysUserVo(sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, id)));
     }
 
+    /**
+     * spring security 自定义获取用户信息的方法
+     * 其中用户名从请求路径中获取是使用request.getParameter("username"),但同时只接受post请求
+     * 所以前端请求时需要用post请求并且使用 headers:{'Content-Type': 'application/x-www-form-urlencoded'}配置
+     * 或者使用路径参 login?username=wlm&password=123456(不推荐)
+     * @param username 用户名
+     * @return 用户信息
+     * @throws UsernameNotFoundException 用户名不存在异常
+     */
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, userName));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
         if (user == null) {
             throw new ApiException(500, "用户不存在");
         }

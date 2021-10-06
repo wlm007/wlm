@@ -50,6 +50,18 @@ public class SysUserDto implements UserDetails {
         this.roleNo = user.getRoleNo();
     }
 
+    public SysUser getUser() {
+        SysUser user = new SysUser();
+        user.setId(this.id);
+        user.setUsername(this.username);
+        user.setPassword(this.password);
+        user.setAge(this.age);
+        user.setRoleNo(this.roleNo);
+        user.setEmail(this.email);
+        user.setDeptNo(this.deptNo);
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
