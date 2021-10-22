@@ -1,8 +1,7 @@
 package com.wlm.wlm.security;
 
 import com.alibaba.fastjson.JSON;
-import com.wlm.wlm.config.ApiException;
-import com.wlm.wlm.dao.SysUserMapper;
+import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.dto.SysUserDto;
 import com.wlm.wlm.model.SysUser;
 import com.wlm.wlm.util.JwtUtils;
@@ -37,16 +36,13 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @Autowired
-    private SysUserMapper sysUserMapper;
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         SysUserDto userDto = (SysUserDto) authentication.getPrincipal();
         if (userDto == null) {
-            securityUtils.sendError(response, new ApiException(500, "用户不存在"), HttpServletResponse.SC_OK, "用户不存在");
+            securityUtils.sendError(response, HttpServletResponse.SC_OK, ApiResult.NOT_EXIST, "用户名或密码错误，请重新输入");
             return;
         }
         SysUser user = userDto.getUser();

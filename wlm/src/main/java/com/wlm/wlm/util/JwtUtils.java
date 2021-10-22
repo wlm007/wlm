@@ -27,9 +27,9 @@ public class JwtUtils {
      */
     public static final String SECRET_KEY = "Knl6ay1hcGkq";
     /**
-     * token过期时间(小时)
+     * token过期时间(分钟)
      */
-    public static final int TOKEN_EXPIRE_TIME = 1;
+    public static final int TOKEN_EXPIRE_TIME = 30;
 
     /**
      * refreshToken过期时间(小时)
@@ -43,8 +43,9 @@ public class JwtUtils {
      */
     public static String generateToken(SysUser sysUser) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, TOKEN_EXPIRE_TIME);
+        calendar.add(Calendar.MINUTE, TOKEN_EXPIRE_TIME);
         return Jwts.builder().setSubject(sysUser.getId().toString())
+                .claim("age", sysUser.getAge())
                 .claim("deptNo", sysUser.getDeptNo())
                 .claim("roleNo", sysUser.getRoleNo())
                 .claim("username", sysUser.getUsername())
@@ -58,14 +59,17 @@ public class JwtUtils {
      * 获取登录者信息
      * @return  用户信息
      */
-    public static SysUser getUserInfo() {
-        HttpServletRequest request =
-                ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
-                        .getRequest();
+    public static SysUser getUserInfo(HttpServletRequest request) {
+        if (null == request) {
+            request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        }
         SysUser user = null;
         try {
-            Claims claims = Jwts.parser().setSigningKey(generateKey())
-                    .parseClaimsJws(request.getHeader("access-token")).getBody();
+            String token = request.getHeader("x-access-token");
+            if (StringUtils.isEmpty(token)) {
+                return null;
+            }
+            Claims claims = Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token).getBody();
             user = new SysUser();
             getUser(user, claims);
         } catch (Exception e) {
@@ -92,6 +96,7 @@ public class JwtUtils {
 
     private static void getUser(SysUser user, Claims claims) {
         user.setId(Integer.valueOf(claims.getSubject()));
+        user.setAge(Integer.valueOf(claims.get("age").toString()));
         user.setDeptNo(claims.get("deptNo").toString());
         user.setRoleNo(claims.get("roleNo").toString());
         user.setUsername(claims.get("username").toString());

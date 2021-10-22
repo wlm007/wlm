@@ -30,9 +30,6 @@ export default {
       }
     }
   },
-  mounted () {
-    console.log('加载页面')
-  },
   methods: {
     async login () {
       const res = await api.sysUser.login(this.$qs.stringify(this.form), {
@@ -42,7 +39,9 @@ export default {
         }
       })
       if (res.data.code === 200) {
+        this.$message.success('登录成功')
         sessionStorage.setItem('user', JSON.stringify(res.data.data))
+        sessionStorage.setItem('jwt', res.data.data.token)
         this.$router.push('/index')
       }
     },

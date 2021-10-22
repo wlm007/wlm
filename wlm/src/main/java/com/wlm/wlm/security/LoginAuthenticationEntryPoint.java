@@ -1,5 +1,6 @@
 package com.wlm.wlm.security;
 
+import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public class LoginAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         logger.info(">>>>>>>>>>>>> logout time");
-        securityUtils.sendError(response, e, HttpServletResponse.SC_UNAUTHORIZED, "登录超时或未登录，请重新登录");
+        logger.error(e.getMessage());
+        securityUtils.sendError(response, HttpServletResponse.SC_OK, ApiResult.NOT_LOGIN_OR_OUT, "登录超时或未登录，请重新登录");
     }
 }

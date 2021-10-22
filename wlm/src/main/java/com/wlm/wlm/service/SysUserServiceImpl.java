@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.config.ApiException;
+import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.dao.SysRoleMapper;
 import com.wlm.wlm.dao.SysUserMapper;
@@ -11,7 +12,7 @@ import com.wlm.wlm.dto.SysUserDto;
 import com.wlm.wlm.model.SysRole;
 import com.wlm.wlm.model.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
-import com.wlm.wlm.params.sysUser.SysUserParams;
+import com.wlm.wlm.params.sysUser.SysUserAddParams;
 import com.wlm.wlm.util.JwtUtils;
 import com.wlm.wlm.util.StringUtils;
 import com.wlm.wlm.vo.SysUserVo;
@@ -44,17 +45,16 @@ public class SysUserServiceImpl implements UserDetailsService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public SysUserVo register(SysUserParams params) {
+    public SysUserVo register(SysUserAddParams params) {
         // 判断姓名是否存在
         SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, params.getUsername()));
         if (user != null) {
-            throw new ApiException(500, "用户名已存在");
+            throw new ApiException(ApiResult.ERROR, "用户名已存在");
         }
         String password = passwordEncoder.encode(StringUtils.isNotEmpty(params.getPassword()) ? params.getPassword() : "123456");
-        SysUser sysUser = new SysUser();
-        sysUser.setUsername(params.getUsername());
-        sysUser.setPassword(password);
+        params.setPassword(password);
+        SysUser sysUser = params.getSysUser();
         sysUserMapper.insert(sysUser);
         SysUserVo result = new SysUserVo(sysUser);
         result.setToken(JwtUtils.generateToken(sysUser));
@@ -82,10 +82,15 @@ public class SysUserServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
+
+        SysUser user = JwtUtils.getUserInfo(null);
         if (user == null) {
-            throw new ApiException(500, "用户不存在");
+            user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
+            if (user == null) {
+                throw new ApiException(ApiResult.ERROR, "用户不存在");
+            }
         }
+
         List<SysRole> roleList = sysRoleMapper.selectList(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleNo, user.getRoleNo()));
         SysUserDto userDto = new SysUserDto(user);
         userDto.setRoleList(roleList);

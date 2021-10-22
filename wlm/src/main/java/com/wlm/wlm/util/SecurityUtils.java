@@ -40,14 +40,11 @@ public final class SecurityUtils {
         return userName;
     }
 
-    public void sendError(HttpServletResponse response, Exception e, int status, String message) throws IOException {
+    public void sendError(HttpServletResponse response, int status, Integer code, String message) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(status);
-        if (e != null) {
-            e.printStackTrace();
-        }
         PrintWriter writer = response.getWriter();
-        String res = OBJECT_MAPPER.writer().writeValueAsString(new ApiResult<>(500, message));
+        String res = OBJECT_MAPPER.writer().writeValueAsString(new ApiResult<>(code, message));
         logger.info(">>>>>>> 错误返回: " + res);
         writer.write(res);
         writer.flush();

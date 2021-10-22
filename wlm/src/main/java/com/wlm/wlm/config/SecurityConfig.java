@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * security登录验证
@@ -46,6 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginFailureHandler loginFailureHandler;
+
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -80,12 +83,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
         http.cors().and().
                 authorizeRequests().anyRequest().authenticated().and()
-                .exceptionHandling().accessDeniedHandler(loginAccessDeniedHandler).authenticationEntryPoint(loginAuthenticationEntryPoint).and()
+                .exceptionHandling()
+                .accessDeniedHandler(loginAccessDeniedHandler).authenticationEntryPoint(loginAuthenticationEntryPoint).and()
                 .formLogin().loginProcessingUrl("/sysUser/login")
                 .successHandler(loginSuccessHandler).failureHandler(loginFailureHandler)
-                .permitAll().and().logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                .deleteCookies("").permitAll().and().csrf().disable()
-                .sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
+                .permitAll().and().logout().logoutSuccessHandler(logoutSuccessHandler)
+                .deleteCookies("JSESSIONID").permitAll().and().csrf().disable()
+                .sessionManagement()
+                .maximumSessions(1).maxSessionsPreventsLogin(false);
 
     }
 }

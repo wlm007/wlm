@@ -5,6 +5,9 @@ export default {
   login (params, config) {
     return webapi.post(`/sysUser/login`, params, config)
   },
+  logout () {
+    return webapi.post('/logout')
+  },
   register (params, config) {
     return webapi.post(`/sysUser/register`, params, config)
   },

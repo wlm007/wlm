@@ -10,6 +10,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'main',
+      component: index,
       meta: {
         requireAuth: true
       }
@@ -33,21 +35,6 @@ const router = new Router({
       }
     }
   ]
-})
-
-router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    const userInfo = JSON.parse(sessionStorage.getItem('user'))
-    if (userInfo && userInfo.token) {
-      next()
-    } else {
-      next({
-        path: '/login'
-      })
-    }
-  } else {
-    next()
-  }
 })
 
 export default router

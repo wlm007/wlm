@@ -1,8 +1,10 @@
 package com.wlm.wlm.config;
 
+import com.wlm.wlm.security.CustomizedLogoutSuccessHandler;
 import com.wlm.wlm.util.SecurityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * 项目bean工厂
@@ -15,5 +17,10 @@ public class AppBeanConfig {
     @Bean
     public SecurityUtils getSecurityUtils() {
         return new SecurityUtils();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new CustomizedLogoutSuccessHandler();
     }
 }

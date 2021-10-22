@@ -1,5 +1,6 @@
 package com.wlm.wlm.security;
 
+import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public class LoginAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
         logger.info(">>>>>>>>>>>>>>> login error");
-        securityUtils.sendError(response, e, HttpServletResponse.SC_UNAUTHORIZED, "该用户无访问权限");
+        logger.error(e.getMessage());
+        securityUtils.sendError(response, HttpServletResponse.SC_OK, ApiResult.NO_AUTHORITY, "该用户无访问权限");
     }
 }

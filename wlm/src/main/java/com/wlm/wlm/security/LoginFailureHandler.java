@@ -1,6 +1,6 @@
 package com.wlm.wlm.security;
 
-import com.wlm.wlm.config.ApiException;
+import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +30,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         logger.info(">>>>>>>>>>> login failure");
-        securityUtils.sendError(response, new ApiException(500, "用户名或密码错误"), HttpServletResponse.SC_OK, "用户名或密码错误");
+        logger.error(exception.getMessage());
+        securityUtils.sendError(response, HttpServletResponse.SC_OK, ApiResult.LOGIN_ERROR, "用户名或密码错误，请重新输入");
     }
 }

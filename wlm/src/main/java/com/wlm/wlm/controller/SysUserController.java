@@ -4,7 +4,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
-import com.wlm.wlm.params.sysUser.SysUserParams;
+import com.wlm.wlm.params.sysUser.SysUserAddParams;
 import com.wlm.wlm.service.SysUserServiceImpl;
 import com.wlm.wlm.vo.SysUserVo;
 import io.swagger.annotations.Api;
@@ -29,7 +29,7 @@ public class SysUserController {
     @ApiOperation(value = "注册")
     @ApiOperationSupport(author = "wlm", order = 1)
     @PostMapping("/register")
-    public ApiResult<SysUserVo> register(@Validated @RequestBody SysUserParams params) {
+    public ApiResult<SysUserVo> register(@Validated @RequestBody SysUserAddParams params) {
         return new ApiResult<>(sysUserService.register(params));
     }
 

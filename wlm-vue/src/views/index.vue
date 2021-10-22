@@ -1,31 +1,29 @@
 <template>
   <div class="home_index">
     <el-container>
-      <el-header>surprise mother fuck</el-header>
+      <el-header>
+        <h3>天下武功，唯快不破</h3>
+        <div class="home_header_user_info">
+          <span>欢迎您 {{userInfo.username}}</span>
+          <el-button type="text" @click="logout">退出</el-button>
+        </div>
+      </el-header>
       <el-main>
         <el-container>
           <el-aside width="200px">
-            <el-menu :default-openeds="['1', '3']">
-              <el-submenu index="1">
-                <template slot="title"><i class="el-icon-message"></i>标签1</template>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-              </el-submenu>
-              <el-submenu index="2">
-                <template slot="title"><i class="el-icon-menu"></i>标签2</template>
-                <el-menu-item index="2-1">选项1</el-menu-item>
-                <el-menu-item index="2-2">选项2</el-menu-item>
-              </el-submenu>
-              <el-submenu index="3">
-                <template slot="title"><i class="el-icon-setting"></i>系统管理</template>
-                <el-menu-item index="3-1" @click="toDeptList()">部门管理</el-menu-item>
-                <el-menu-item index="3-2">角色管理</el-menu-item>
-                <el-menu-item index="3-3">用户管理</el-menu-item>
-              </el-submenu>
+            <el-menu>
+              <template v-for="item in menuList">
+                <el-submenu :index="`${item.id}`" :key="item.id">
+                  <template slot="title">{{ item.menuName }}</template>
+                  <el-menu-item v-for="child in item.children" :key="child.id" :index="`${child.id}`" @click="toIndexView(child.menuFun)">{{ child.menuName }}</el-menu-item>
+                </el-submenu>
+              </template>
             </el-menu>
           </el-aside>
           <el-container>
-            <el-main></el-main>
+            <el-main>
+              <component :is="menuId"></component>
+            </el-main>
             <el-footer>Footer</el-footer>
           </el-container>
         </el-container>
@@ -35,16 +33,53 @@
 </template>
 
 <script>
+import api from '@/webapi'
+import _ from 'lodash'
+
 export default {
+  components: {
+    deptIndex: () => ({ component: import('@/views/dept/index.vue') }),
+    userIndex: () => ({ component: import('@/views/user/index.vue') }),
+    roleIndex: () => ({ component: import('@/views/role/index.vue') })
+  },
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      menuId: '',
+      menuList: [],
+      userInfo: {
+        username: ''
+      }
+    }
+  },
+  async mounted () {
+    const u = JSON.parse(sessionStorage.getItem('user'))
+    if (u) this.userInfo = u
+    const res = await api.sysMenu.list()
+    if (res.data.code === 200) {
+      _.forEach(res.data.data, item => {
+        if (item.menuType === 0) {
+          item.children = []
+          _.forEach(res.data.data, child => {
+            if (child.parentId === item.id) {
+              item.children.push(child)
+            }
+          })
+          this.menuList.push(item)
+        }
+      })
     }
   },
   methods: {
-    toDeptList () {
-      console.log('前往部门管理')
+    toIndexView (viewName) {
+      this.menuId = viewName
+    },
+    logout () {
+      sessionStorage.removeItem('user')
+      sessionStorage.removeItem('jwt')
+      this.$router.push('/login')
+      this.$message.success('退出成功')
+      api.sysUser.logout()
     }
   }
 }
@@ -95,5 +130,11 @@ export default {
 
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
+}
+
+.home_header_user_info {
+  position: absolute;
+  right: 20px;
+  top: 0px;
 }
 </style>

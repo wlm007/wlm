@@ -12,6 +12,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApiResult<T> {
 
+    /**
+     * 通用code
+     */
+    public static final Integer OK = 200;
+    public static final Integer CUSTOM_ERROR = 500;
+    public static final Integer ERROR = 520;
+
+    /**
+     * 安全认证登录异常
+     */
+    public static final Integer NOT_LOGIN_OR_OUT = 1001;
+    public static final Integer LOGIN_ERROR = 1002;
+    public static final Integer NO_AUTHORITY = 1003;
+    public static final Integer NOT_EXIST = 1004;
+
+
     private Integer code = 200;
 
     private String msg = "success";

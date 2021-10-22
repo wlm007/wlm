@@ -52,9 +52,7 @@ public class Knife4jConfiguration {
     private List<Parameter> globalOperation(){
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
-        String swaggerDefaultToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNDI3NTcwODI1MTA0NTE5MTcwIiwidXNlcm5hbWUiOiJ3d" +
-                "WxpbWluZyIsImV4cCI6MjQ5MzM1NTEzOH0.pA0rGSqduPFo1z0fpWd_zJNSBmSvUiLIW6rTrly1O9iijEzI7YdRbsPWCedXJbW" +
-                "MRrxdxxPy25sedNdsXXgl1A";
+        String swaggerDefaultToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJ3bG0iLCJleHAiOjE5OTQ4NzAyMjV9.CBaBmSjwrttj4lXMG5MI8aoTmzRYFg3oYIDb9BEk0zpeASk_gDWqqyKYL5_VJs9IMUUgos-F-s0ypSCqNU24Bg";
         tokenPar.name("x-access-token").modelRef(new ModelRef("string"))
                 .defaultValue(swaggerDefaultToken)
                 .parameterType("header").required(false).build();
