@@ -28,8 +28,14 @@ public class SysUserVo {
     @ApiModelProperty("部门编号")
     private String deptNo;
 
+    @ApiModelProperty("部门名称")
+    private String deptName;
+
     @ApiModelProperty("角色编号")
     private String roleNo;
+
+    @ApiModelProperty("角色名称")
+    private String roleName;
 
     @ApiModelProperty("登录token")
     private String token;

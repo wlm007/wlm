@@ -10,10 +10,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class PageParam {
 
     @ApiModelProperty("分页-第几页, 默认1")
-    private Integer pageNo;
+    private Integer pageNo = 1;
 
     @ApiModelProperty("分页-每页数, 默认30")
-    private Integer pageSize;
+    private Integer pageSize = 30;
 
 
     public Integer getPageNo() {

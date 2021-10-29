@@ -8,7 +8,7 @@ package com.wlm.wlm.util;
 public class StringUtils {
 
     public static boolean isEmpty(String str) {
-        return "".equals(str) || str != null;
+        return "".equals(str) || str == null;
     }
 
     public static boolean isNotEmpty(String str) {

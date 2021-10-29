@@ -26,6 +26,11 @@ public class SysDept implements Serializable {
     private String deptNo;
 
     /**
+     * 父级部门，顶级无父级部门为root
+     */
+    private String parentNo;
+
+    /**
      * 部门名称
      */
     private String deptName;
@@ -33,5 +38,5 @@ public class SysDept implements Serializable {
     /**
      * 是否删除0=否,1=是
      */
-    private Integer idDelete;
+    private Integer isDelete;
 }

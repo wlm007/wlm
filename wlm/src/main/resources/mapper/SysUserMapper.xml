@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wlm.wlm.dao.SysUserMapper">
-    <cache/>
-    <select id="findUserListByRoleNo" resultType="com.wlm.wlm.model.SysUser">
-        select username, age, email, dept_no, role_no
-        from sys_user
+<!-- 开启或关闭一级缓存   -->
+<!--    <cache/>-->
+    <select id="findUserListByRoleNo" resultType="com.wlm.wlm.vo.SysUserVo">
+        select a.username, a.age, a.email, a.dept_no, a.role_no,
+               (select d.dept_name from sys_dept d where a.dept_no = d.dept_no) as deptName,
+               (select r.role_name from sys_role r where a.role_no = r.role_no) as roleName
+        from sys_user a
         <where>
             <if test="params.roleNo != '' and params.roleNo != null">
                 role_no = #{params.roleNo}

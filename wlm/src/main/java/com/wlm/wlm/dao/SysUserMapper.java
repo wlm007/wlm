@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.model.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
+import com.wlm.wlm.vo.SysUserVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -19,5 +20,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param params 条件参数
      * @return 用户列表
      */
-    IPage<SysUser> findUserListByRoleNo(Page<SysUser> page, @Param("params") SysUserListParams params);
+    IPage<SysUserVo> findUserListByRoleNo(Page<SysUserVo> page, @Param("params") SysUserListParams params);
 }

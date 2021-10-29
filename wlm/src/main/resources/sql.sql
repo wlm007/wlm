@@ -32,9 +32,10 @@ insert into wlm.sys_role values (1, 'admin', '管理员', 0);
 # 部门表
 create table wlm.sys_dept (
     id int auto_increment comment '主键',
-    dept_no varchar(20) not null comment '部门编号',
+    dept_no varchar(42) not null comment '部门编号',
+    parent_no varchar(42) not null comment '父级部门，顶级无父级部门为root',
     dept_name varchar(30) comment '部门名称',
-    id_delete int(1) default 0 comment '是否删除0=否,1=是',
+    is_delete int(1) default 0 comment '是否删除0=否,1=是',
     primary key (id)
 );
 alter table `wlm`.`sys_dept` comment = '部门表';

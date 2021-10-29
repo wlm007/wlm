@@ -10,18 +10,11 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/wlm': {
-        target: 'http://localhost:8001',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/': '/'
-        }
-      }
-    },
+    proxyTable: {},
 
     // Various Dev Server settings
     port: 7001, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    host: 'localhost',
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -58,7 +51,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps

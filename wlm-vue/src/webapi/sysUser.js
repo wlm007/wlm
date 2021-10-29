@@ -13,5 +13,8 @@ export default {
   },
   getOne (userId) {
     return webapi.get(`/sysUser/getOne/${userId}`)
+  },
+  getList (params, config) {
+    return webapi.post(`/sysUser/list`, params, config)
   }
 }

@@ -11,8 +11,9 @@ import com.wlm.wlm.dao.SysUserMapper;
 import com.wlm.wlm.dto.SysUserDto;
 import com.wlm.wlm.model.SysRole;
 import com.wlm.wlm.model.SysUser;
-import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserAddParams;
+import com.wlm.wlm.params.sysUser.SysUserListParams;
+import com.wlm.wlm.params.sysUser.SysUserUpdateParams;
 import com.wlm.wlm.util.JwtUtils;
 import com.wlm.wlm.util.StringUtils;
 import com.wlm.wlm.vo.SysUserVo;
@@ -25,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author wuliming
@@ -62,9 +62,9 @@ public class SysUserServiceImpl implements UserDetailsService {
     }
 
     public PageInfoResult<List<SysUserVo>> list(SysUserListParams params) {
-        Page<SysUser> page = new Page<>(params.getPageNo(), params.getPageSize());
-        IPage<SysUser> userList = sysUserMapper.findUserListByRoleNo(page, params);
-        return new PageInfoResult<>(userList.getTotal(), userList.getRecords().stream().map(SysUserVo::new).collect(Collectors.toList()));
+        Page<SysUserVo> page = new Page<>(params.getPageNo(), params.getPageSize());
+        IPage<SysUserVo> result = sysUserMapper.findUserListByRoleNo(page, params);
+        return new PageInfoResult<>(result.getTotal(), result.getRecords());
     }
 
     public SysUserVo getUser(Integer id) {
@@ -83,17 +83,32 @@ public class SysUserServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        SysUser user = JwtUtils.getUserInfo(null);
+        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
         if (user == null) {
-            user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
-            if (user == null) {
-                throw new ApiException(ApiResult.ERROR, "用户不存在");
-            }
+            throw new ApiException(ApiResult.ERROR, "用户不存在");
         }
 
         List<SysRole> roleList = sysRoleMapper.selectList(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleNo, user.getRoleNo()));
         SysUserDto userDto = new SysUserDto(user);
         userDto.setRoleList(roleList);
         return userDto;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysUserUpdateParams params) {
+        SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, params.getUsername()));
+        if (user != null) {
+            throw new ApiException(ApiResult.ERROR, "用户名已存在，请重新输入");
+        }
+        SysUser updateUser = new SysUser();
+        updateUser.setId(params.getId());
+        updateUser.setUsername(params.getUsername());
+        updateUser.setAge(params.getAge());
+        updateUser.setEmail(params.getEmail());
+        updateUser.setDeptNo(params.getDeptNo());
+        updateUser.setRoleNo(params.getRoleNo());
+        // 密码默认为123456
+        updateUser.setPassword(passwordEncoder.encode("123456"));
+        sysUserMapper.updateById(updateUser);
     }
 }

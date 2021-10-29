@@ -2,8 +2,9 @@
   <div class="home_index">
     <el-container>
       <el-header>
-        <h3>天下武功，唯快不破</h3>
+        <!-- <h3>天下武功，唯快不破</h3> -->
         <div class="home_header_user_info">
+          <el-button type="text" @click="refrash">刷新</el-button>
           <span>欢迎您 {{userInfo.username}}</span>
           <el-button type="text" @click="logout">退出</el-button>
         </div>
@@ -22,9 +23,9 @@
           </el-aside>
           <el-container>
             <el-main>
-              <component :is="menuId"></component>
+              <component v-if="isShow" :is="menuId"></component>
             </el-main>
-            <el-footer>Footer</el-footer>
+            <!-- <el-footer>Footer</el-footer> -->
           </el-container>
         </el-container>
       </el-main>
@@ -45,6 +46,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      isShow: true,
       menuId: '',
       menuList: [],
       userInfo: {
@@ -75,11 +77,17 @@ export default {
       this.menuId = viewName
     },
     logout () {
+      api.sysUser.logout()
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('jwt')
       this.$router.push('/login')
       this.$message.success('退出成功')
-      api.sysUser.logout()
+    },
+    refrash () {
+      this.isShow = false
+      setTimeout(() => {
+        this.isShow = true
+      }, 500)
     }
   }
 }
@@ -109,6 +117,8 @@ export default {
 }
 
 .el-main {
+  height: 100%;
+  width: 100%;
   background-color: #E9EEF3;
   color: #333;
   text-align: center;
@@ -121,6 +131,7 @@ export default {
 
 .home_index .el-main {
   padding: 0;
+  overflow: hidden;
 }
 
 .el-container:nth-child(5) .el-aside,
