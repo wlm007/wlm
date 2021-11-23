@@ -4,7 +4,7 @@
 <!-- 开启或关闭一级缓存   -->
 <!--    <cache/>-->
     <select id="findUserListByRoleNo" resultType="com.wlm.wlm.vo.SysUserVo">
-        select a.username, a.age, a.email, a.dept_no, a.role_no,
+        select a.id, a.username, a.age, a.email, a.dept_no, a.role_no,
                (select d.dept_name from sys_dept d where a.dept_no = d.dept_no) as deptName,
                (select r.role_name from sys_role r where a.role_no = r.role_no) as roleName
         from sys_user a
@@ -25,5 +25,12 @@
                 and role_no in (select role_no from sys_role where role_name like concat('%',#{params.roleName},'%'))
             </if>
         </where>
+    </select>
+    <select id="selectOneById" resultType="com.wlm.wlm.vo.SysUserVo">
+        select a.id, a.username, a.age, a.email, a.dept_no, a.role_no,
+               (select d.dept_name from sys_dept d where a.dept_no = d.dept_no) as deptName,
+               (select r.role_name from sys_role r where a.role_no = r.role_no) as roleName
+        from sys_user a
+        where a.id = #{id}
     </select>
 </mapper>

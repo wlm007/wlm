@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wlm.wlm.dao.SysDeptMapper">
+    <update id="updateDeptNameById">
+        update sys_dept set dept_name = #{deptName} where id = #{id}
+    </update>
+    <select id="listDept" resultType="com.wlm.wlm.vo.SysDeptVo">
+        select sd.id, sd.dept_no, sd.parent_no, sd.dept_name,
+               (select sd2.dept_name from sys_dept sd2 where sd.parent_no = sd2.dept_no) as parentDeptName
+        from sys_dept sd
+        <where>
+            <if test="deptName != null and deptName != ''">
+                sd.dept_name like concat('%',#{deptName},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getDeptNoByParentNo" resultType="java.lang.String">
+        select max(substr(dept_no, -3, 3)) from sys_dept where parent_no = #{parentNo}
+    </select>
 </mapper>

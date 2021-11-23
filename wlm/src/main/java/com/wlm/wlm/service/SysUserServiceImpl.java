@@ -52,8 +52,11 @@ public class SysUserServiceImpl implements UserDetailsService {
         if (user != null) {
             throw new ApiException(ApiResult.ERROR, "用户名已存在");
         }
+        // 密码如果未设置则默认为123456
         String password = passwordEncoder.encode(StringUtils.isNotEmpty(params.getPassword()) ? params.getPassword() : "123456");
         params.setPassword(password);
+        // 用户角色如果未输入则默认为普通用户
+        params.setRoleNo(StringUtils.isNotEmpty(params.getRoleNo()) ? params.getRoleNo() : "user");
         SysUser sysUser = params.getSysUser();
         sysUserMapper.insert(sysUser);
         SysUserVo result = new SysUserVo(sysUser);
@@ -68,7 +71,11 @@ public class SysUserServiceImpl implements UserDetailsService {
     }
 
     public SysUserVo getUser(Integer id) {
-        return new SysUserVo(sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, id)));
+        return sysUserMapper.selectOneById(id);
+    }
+
+    public void deleteUser(Integer id) {
+        sysUserMapper.deleteById(id);
     }
 
     /**
@@ -97,7 +104,7 @@ public class SysUserServiceImpl implements UserDetailsService {
     @Transactional(rollbackFor = Exception.class)
     public void update(SysUserUpdateParams params) {
         SysUser user = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, params.getUsername()));
-        if (user != null) {
+        if (user != null && !user.getId().equals(params.getId())) {
             throw new ApiException(ApiResult.ERROR, "用户名已存在，请重新输入");
         }
         SysUser updateUser = new SysUser();
@@ -107,8 +114,6 @@ public class SysUserServiceImpl implements UserDetailsService {
         updateUser.setEmail(params.getEmail());
         updateUser.setDeptNo(params.getDeptNo());
         updateUser.setRoleNo(params.getRoleNo());
-        // 密码默认为123456
-        updateUser.setPassword(passwordEncoder.encode("123456"));
         sysUserMapper.updateById(updateUser);
     }
 }

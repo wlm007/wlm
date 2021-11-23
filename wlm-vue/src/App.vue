@@ -32,7 +32,4 @@ body {
   margin: 0;
   position: relative;
 }
-.el-table th>div {
-  height: 30px;
-}
 </style>

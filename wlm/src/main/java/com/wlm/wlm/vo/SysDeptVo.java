@@ -1,8 +1,11 @@
 package com.wlm.wlm.vo;
 
-import com.wlm.wlm.model.SysDept;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 系统部门vo
@@ -10,6 +13,7 @@ import lombok.Data;
  * @date 2021/10/29 11:52
  */
 @Data
+@NoArgsConstructor
 public class SysDeptVo {
 
     @ApiModelProperty("主键")
@@ -18,8 +22,11 @@ public class SysDeptVo {
     @ApiModelProperty("部门编号")
     private String deptNo;
 
-    @ApiModelProperty("父级部门，顶级无父级部门为root")
+    @ApiModelProperty("父级部门，顶级无父级部门为空")
     private String parentNo;
+
+    @ApiModelProperty("父级部门名称")
+    private String parentDeptName;
 
     @ApiModelProperty("部门名称")
     private String deptName;
@@ -27,11 +34,6 @@ public class SysDeptVo {
     @ApiModelProperty("是否删除0=否,1=是")
     private Integer isDelete;
 
-    public SysDeptVo(SysDept sysDept) {
-        this.id = sysDept.getId();
-        this.deptNo = sysDept.getDeptNo();
-        this.parentNo = sysDept.getParentNo();
-        this.deptName = sysDept.getDeptName();
-        this.isDelete = sysDept.getIsDelete();
-    }
+    @ApiModelProperty("下一级部门列表")
+    private List<SysDeptVo> children = new ArrayList<>();
 }

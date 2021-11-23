@@ -21,5 +21,15 @@ public class LogAspect {
     @Before(PATH_INFO)
     public void before(JoinPoint point, ApiOperation annotation) {
         log.info("请求路径说明: " + annotation.value());
+        Object[] args = point.getArgs();
+        StringBuilder sb = new StringBuilder("参数列表：");
+        for (Object arg : args) {
+            if (arg instanceof String || arg instanceof Integer) {
+                sb.append(arg).append(",");
+            } else {
+                sb.append(arg.toString()).append(",");
+            }
+        }
+        log.info(sb.toString());
     }
 }

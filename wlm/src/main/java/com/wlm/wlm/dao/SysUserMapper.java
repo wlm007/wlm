@@ -21,4 +21,11 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return 用户列表
      */
     IPage<SysUserVo> findUserListByRoleNo(Page<SysUserVo> page, @Param("params") SysUserListParams params);
+
+    /**
+     * 查询指定用户信息
+     * @param id 用户id
+     * @return 用户信息
+     */
+    SysUserVo selectOneById(@Param("id") Integer id);
 }

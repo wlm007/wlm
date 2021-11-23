@@ -28,7 +28,7 @@ public class SysUserController {
     @Autowired
     private SysUserServiceImpl sysUserService;
 
-    @ApiOperation(value = "注册")
+    @ApiOperation(value = "注册或添加")
     @ApiOperationSupport(author = "wlm", order = 1)
     @PostMapping("/register")
     public ApiResult<SysUserVo> register(@Validated @RequestBody SysUserAddParams params) {
@@ -54,6 +54,14 @@ public class SysUserController {
     @PostMapping("/update")
     public ApiResult<Object> update(@Valid @RequestBody SysUserUpdateParams params) {
         sysUserService.update(params);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "根据id删除用户")
+    @ApiOperationSupport(author = "wlm", order = 6)
+    @GetMapping("/delete/{id}")
+    public ApiResult<Object> delete(@PathVariable Integer id) {
+        sysUserService.deleteUser(id);
         return new ApiResult<>();
     }
 }

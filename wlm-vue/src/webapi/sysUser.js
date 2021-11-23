@@ -16,5 +16,11 @@ export default {
   },
   getList (params, config) {
     return webapi.post(`/sysUser/list`, params, config)
+  },
+  update (params, config) {
+    return webapi.post(`/sysUser/update`, params, config)
+  },
+  deleteUser (userId) {
+    return webapi.get(`/sysUser/delete/${userId}`)
   }
 }

@@ -5,17 +5,17 @@ create database wlm character set 'utf8' collate 'utf8_general_ci';
 create table wlm.sys_user (
     id int auto_increment comment '主键',
     username varchar(30) comment '姓名',
-    password varchar(50) comment '密码',
+    password varchar(100) comment '密码',
     age int comment '年龄',
     email varchar(50) comment '电子邮箱',
     dept_no varchar(20) comment '部门编号',
     role_no varchar(20) comment '角色编号',
-    PRIMARY KEY (id, username)
+    PRIMARY KEY (id)
 );
 alter table `wlm`.`sys_user` comment = '用户表';
 
 #初始化用户 wlm/123456
-insert into wlm.sys_user values (null, 'wlm', '$2a$10$sFniAJ3xM41tOQ.KLO.0kuYHqijYWAfoaFtqyvu6.CJUS5JqZcQqC', 0, '123@qq.com', 1, 1);
+insert into wlm.sys_user values (null, 'wlm', '$2a$10$sFniAJ3xM41tOQ.KLO.0kuYHqijYWAfoaFtqyvu6.CJUS5JqZcQqC', 15, '123@qq.com', '001', 'admin');
 
 # 角色表
 create table wlm.sys_role (
@@ -27,7 +27,7 @@ create table wlm.sys_role (
 );
 alter table `wlm`.`sys_role` comment = '角色表';
 
-insert into wlm.sys_role values (1, 'admin', '管理员', 0);
+insert into wlm.sys_role (role_no, role_name) values ('admin', '管理员'), ('user', '普通用户');
 
 # 部门表
 create table wlm.sys_dept (
@@ -40,7 +40,8 @@ create table wlm.sys_dept (
 );
 alter table `wlm`.`sys_dept` comment = '部门表';
 
-insert into wlm.sys_dept values (1, 'root', '地球国际联盟', 0);
+insert into wlm.sys_dept(dept_no, parent_no, dept_name) values ('root', 'root', '地球国际联盟'),
+                                                               ('001', 'root', '中国理事会');
 
 # 菜单表
 create table wlm.sys_menu (

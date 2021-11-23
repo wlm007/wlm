@@ -81,8 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 可以自定义登录的相关处理逻辑
         http.headers().frameOptions().sameOrigin();
-        http.cors().and().
-                authorizeRequests().anyRequest().authenticated().and()
+        http.cors().and()
+                .authorizeRequests().anyRequest().authenticated().and()
                 .exceptionHandling()
                 .accessDeniedHandler(loginAccessDeniedHandler).authenticationEntryPoint(loginAuthenticationEntryPoint).and()
                 .formLogin().loginProcessingUrl("/sysUser/login")
