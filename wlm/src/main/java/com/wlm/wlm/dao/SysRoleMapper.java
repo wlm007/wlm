@@ -1,7 +1,12 @@
 package com.wlm.wlm.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.model.SysRole;
+import com.wlm.wlm.params.sysRole.SysRoleListParams;
+import com.wlm.wlm.vo.SysRoleVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author wuliming
@@ -9,4 +14,11 @@ import com.wlm.wlm.model.SysRole;
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
+    /**
+     * 分页查询角色列表
+     * @param params 参数
+     * @param page 分页参数
+     * @return 角色列表
+     */
+    IPage<SysRoleVo> list(@Param("params") SysRoleListParams params, Page<SysRoleVo> page);
 }

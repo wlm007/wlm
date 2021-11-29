@@ -49,7 +49,7 @@ public class SysDeptController {
         return new ApiResult<>();
     }
 
-    @ApiOperation(value = "保存部门信息")
+    @ApiOperation(value = "删除部门(包含删除子部门)")
     @ApiOperationSupport(author = "wlm", order = 3)
     @GetMapping("/delete/{id}")
     public ApiResult<Object> delete(@PathVariable(value = "id") Integer id) {

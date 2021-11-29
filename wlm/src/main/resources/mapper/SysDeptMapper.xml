@@ -4,6 +4,9 @@
     <update id="updateDeptNameById">
         update sys_dept set dept_name = #{deptName} where id = #{id}
     </update>
+    <delete id="deleteAllById">
+        delete from sys_dept where dept_no like concat(#{deptNo}, '%')
+    </delete>
     <select id="listDept" resultType="com.wlm.wlm.vo.SysDeptVo">
         select sd.id, sd.dept_no, sd.parent_no, sd.dept_name,
                (select sd2.dept_name from sys_dept sd2 where sd.parent_no = sd2.dept_no) as parentDeptName

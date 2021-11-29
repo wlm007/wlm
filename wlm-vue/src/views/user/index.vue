@@ -40,10 +40,16 @@
             <el-input v-model="addUserForm.age"></el-input>
           </el-form-item>
           <el-form-item label="部门" label-width="120px" prop="deptNo">
-            <el-input v-model="addUserForm.deptNo"></el-input>
+            <div class="select_dept_show">
+              <span>{{ addUserForm.deptName }}</span>
+              <el-button type="primary" @click="deptVisible = true">选择部门</el-button>
+            </div>
           </el-form-item>
           <el-form-item label="角色" label-width="120px" prop="roleNo">
-            <el-input v-model="addUserForm.roleNo"></el-input>
+            <div class="select_dept_show">
+              <span>{{ addUserForm.roleName }}</span>
+              <el-button type="primary" @click="roleVisible = true">选择角色</el-button>
+            </div>
           </el-form-item>
         </el-form>
       </div>
@@ -65,6 +71,8 @@
       >
       </el-pagination>
     </div>
+    <select-dept :visible.sync="deptVisible" title="请选择部门" :isSigle="true" @confirm="handleDeptSelect"></select-dept>
+    <select-role :visible.sync="roleVisible" title="请选择角色" :isSigle="true" @confirm="handleRoleSelect"></select-role>
   </div>
 
 </template>
@@ -73,8 +81,14 @@
 import api from '@/webapi'
 
 export default{
+  components: {
+    selectDept: () => ({ component: import('@/views/dept/selectDeptDialog.vue') }),
+    selectRole: () => ({ component: import('@/views/role/selectRoleDialog.vue') })
+  },
   data () {
     return {
+      deptVisible: false,
+      roleVisible: false,
       data: [],
       userSearchForm: {
         username: ''
@@ -88,7 +102,9 @@ export default{
         email: '',
         age: '',
         deptNo: '',
-        roleNo: ''
+        deptName: '',
+        roleNo: '',
+        roleName: ''
       },
       total: 0,
       pageNo: 1,
@@ -109,6 +125,18 @@ export default{
         this.data = res.data.data.data
         this.total = res.data.data.total
       }
+    },
+    handleDeptSelect (data) {
+      this.$nextTick(() => {
+        this.addUserForm.deptNo = data.deptNo
+        this.addUserForm.deptName = data.deptName
+      })
+    },
+    handleRoleSelect (data) {
+      this.$nextTick(() => {
+        this.addUserForm.roleNo = data.roleNo
+        this.addUserForm.roleName = data.roleName
+      })
     },
     handleSizeChange (val) {
       this.pageSize = val
@@ -131,7 +159,9 @@ export default{
         this.addUserForm.age = row.age
         this.addUserForm.email = row.email
         this.addUserForm.deptNo = row.deptNo
+        this.addUserForm.deptName = row.deptName
         this.addUserForm.roleNo = row.roleNo
+        this.addUserForm.roleName = row.roleName
       })
     },
     showDialog (showType) {
@@ -144,6 +174,10 @@ export default{
       this.dialogFormVisible = true
     },
     closeDialog () {
+      this.addUserForm.deptNo = ''
+      this.addUserForm.deptName = ''
+      this.addUserForm.roleNo = ''
+      this.addUserForm.roleName = ''
       this.$refs.dialogForm.resetFields()
       this.dialogFormVisible = false
     },
@@ -193,5 +227,11 @@ export default{
 .dialog__form {
   width: 500px;
   margin: auto;
+}
+.select_dept_show {
+  margin: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

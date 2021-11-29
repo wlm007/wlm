@@ -8,9 +8,9 @@
         :data="treeData"
         :props="defaultProps"
         node-key="deptNo"
-        :default-expanded-keys="['root']"
-        :default-checked-keys="['root']"
-        current-node-key="root"
+        :default-expanded-keys="defaultExpandedKeys"
+        :default-checked-keys="defaultCheckedKeys"
+        :current-node-key="currentNodeKey"
         :highlight-current="true"
         :filter-node-method="deptFilterNode"
         :render-content="treeRenderContent"
@@ -79,7 +79,10 @@
           </el-form-item>
           <el-form-item label="角色：" label-width="120px" prop="roleNo">
             <span v-if="userShowType === 'isView'">{{ addUserForm.roleName }}</span>
-            <el-input v-else v-model="addUserForm.roleNo"></el-input>
+            <div v-else class="select_role_show">
+              <span>{{ addUserForm.roleName }}</span>
+              <el-button type="primary" @click="roleVisible = true">选择角色</el-button>
+            </div>
           </el-form-item>
         </el-form>
       </div>
@@ -107,6 +110,7 @@
         <el-button v-else type="primary" @click="deptSubmit">保 存</el-button>
       </div>
     </el-dialog>
+    <select-role :visible.sync="roleVisible" title="请选择角色" :isSigle="true" @confirm="handleRoleSelect"></select-role>
   </div>
 
 </template>
@@ -115,10 +119,17 @@
 import api from '@/webapi'
 
 export default{
+  components: {
+    selectRole: () => ({ component: import('@/views/role/selectRoleDialog.vue') })
+  },
   data () {
     return {
+      roleVisible: false,
       deptFilterText: '',
       treeData: [],
+      currentNodeKey: 'root',
+      defaultExpandedKeys: ['root'],
+      defaultCheckedKeys: ['root'],
       defaultProps: {
         children: 'children',
         label: 'deptName'
@@ -175,8 +186,8 @@ export default{
                     padding-right: 8px;">
           <span>{node.label}</span>
           <span>
-            <el-button type="text" size="mini" on-click={() => { this.showDeptDialog('isAdd') }}>新增</el-button>
-            <el-button type="text" size="mini" on-click={() => { this.showDeptDialog('isEdit') }}>编辑</el-button>
+            <el-button type="text" size="mini" on-click={() => { this.showDeptDialog('isAdd', data) }}>新增</el-button>
+            <el-button type="text" size="mini" on-click={() => { this.showDeptDialog('isEdit', data) }}>编辑</el-button>
             <el-button type="text" size="mini" on-click={() => { this.deleteDept(data) }}>删除</el-button>
           </span>
         </span>)
@@ -200,14 +211,27 @@ export default{
             if (res.data.code === 200) {
               this.$message.success('操作成功')
               this.getDeptTree()
+              this.resetTreeNode('root')
             }
           })
           .catch(() => {})
       }).catch(() => {})
     },
+    resetTreeNode (deptNo) {
+      this.currentNodeKey = deptNo
+      this.defaultExpandedKeys = [deptNo]
+      this.defaultCheckedKeys = [deptNo]
+    },
     handleNodeClick (data) {
       this.deptDetail = data
+      this.resetTreeNode(data.deptNo)
       this.getUserList()
+    },
+    handleRoleSelect (data) {
+      this.$nextTick(() => {
+        this.addUserForm.roleNo = data.roleNo
+        this.addUserForm.roleName = data.roleName
+      })
     },
     async getDeptTree () {
       const res = await api.sysDept.treeList()
@@ -269,10 +293,13 @@ export default{
       this.userDialogFormVisible = true
     },
     closeUserDialog () {
+      this.addUserForm.roleNo = ''
+      this.addUserForm.roleName = ''
       this.$refs.userDialogForm.resetFields()
       this.userDialogFormVisible = false
     },
-    showDeptDialog (deptShowType) {
+    showDeptDialog (deptShowType, data) {
+      this.resetTreeNode(data.deptNo)
       switch (deptShowType) {
         case 'isAdd' : this.deptDialogTitle = '新增子部门'; break
         case 'isEdit' : this.deptDialogTitle = '编辑部门信息'; break
@@ -283,13 +310,13 @@ export default{
         if (deptShowType === 'isAdd') {
           this.addDeptForm.id = 0
           this.addDeptForm.deptName = ''
-          this.addDeptForm.parentNo = this.deptDetail.deptNo
-          this.addDeptForm.parentDeptName = this.deptDetail.deptName
+          this.addDeptForm.parentNo = data.deptNo
+          this.addDeptForm.parentDeptName = data.deptName
         } else {
-          this.addDeptForm.id = this.deptDetail.id
-          this.addDeptForm.deptName = this.deptDetail.deptName
-          this.addDeptForm.parentNo = this.deptDetail.parentNo
-          this.addDeptForm.parentDeptName = this.deptDetail.parentDeptName
+          this.addDeptForm.id = data.id
+          this.addDeptForm.deptName = data.deptName
+          this.addDeptForm.parentNo = data.parentNo
+          this.addDeptForm.parentDeptName = data.parentDeptName
         }
       })
     },
@@ -298,7 +325,6 @@ export default{
       this.deptDialogFormVisible = false
     },
     async deptSubmit () {
-      console.log('提交部门保存', this.addDeptForm)
       const res = await api.sysDept.save(this.addDeptForm, { dismissLoading: false })
       if (res && res.data.code === 200) {
         this.$message.success('操作成功')
@@ -377,5 +403,11 @@ export default{
   position: absolute;
   bottom: 40px;
   width: 100%;
+}
+.select_role_show {
+  margin: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

@@ -32,4 +32,10 @@ public interface SysDeptMapper extends BaseMapper<SysDept> {
      * @param deptName 新部门名称
      */
     void updateDeptNameById(@Param("id") Integer id, @Param("deptName") String deptName);
+
+    /**
+     * 根据id删除本部门及所欲子部门
+     * @param deptNo deptNo
+     */
+    void deleteAllById(@Param("deptNo") String deptNo);
 }

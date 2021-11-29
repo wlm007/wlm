@@ -2,9 +2,11 @@
 import sysUser from './sysUser'
 import sysMenu from './sysMenu'
 import sysDept from './sysDept'
+import sysRole from './sysRole'
 
 export default {
   sysUser,
   sysMenu,
-  sysDept
+  sysDept,
+  sysRole
 }

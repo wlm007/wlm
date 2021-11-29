@@ -81,9 +81,12 @@ public class SysDeptServiceImpl {
 
     public void delete(Integer id) {
         SysDept sysDept = sysDeptMapper.selectById(id);
+        if (null == sysDept) {
+            throw new ApiException(ApiResult.ERROR, "部门不存在");
+        }
         if (null == sysDept.getParentNo() || "".equals(sysDept.getParentNo())) {
             throw new ApiException(ApiResult.ERROR, "根部门不允许删除");
         }
-        sysDeptMapper.deleteById(id);
+        sysDeptMapper.deleteAllById(sysDept.getDeptNo());
     }
 }
