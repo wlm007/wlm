@@ -17,7 +17,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping ("/**")
                 // 允许跨域携带cookie
                 .allowCredentials(true)
-                // 这里不能设置 * 需要明确指定允许访问的路径
-                .allowedOrigins("http://localhost:7001");
+                // 这里不能用 allowedOrigins设置 "*" vue 会报错
+                .allowedOriginPatterns("*")
+                .allowedHeaders("*")
+                .allowedMethods("*")
+        ;
     }
 }

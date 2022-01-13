@@ -28,6 +28,13 @@ spring:
     properties.mail.smtp.starttls.required: true
     properties.mail.smtp.ssl.enable: true
 
+  # mqtt
+  rabbitmq:
+    port: 5672
+    host: localhost
+    username: guest
+    password: guest
+
 # 开启sql打印
 #mybatis-plus:
 #  configuration:
@@ -41,4 +48,9 @@ knife4j:
 # 改设置可使用日志打印sql语句但不打印查询结果
 logging:
   level:
-    com.wlm.wlm.dao.*: debug
+    com.wlm.wlm.*: debug
+
+# 微信公众号配置
+wx:
+  appId: wxaf8ba53c06ecdabc
+  appSecret: 05586b65b3bf05957bf34fdeb00e7044

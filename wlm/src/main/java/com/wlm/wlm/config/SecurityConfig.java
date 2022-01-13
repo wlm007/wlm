@@ -62,15 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         // 可以指定那些请求不需要登录认证
         web.ignoring().antMatchers(
-                "/doc.html",
+                "/doc.html/**",
                 "/",
                 "/sysUser/register",
                 "/swagger/**",
                 "/swagger-ui.html",
-                "/webjars/**",
                 "/v2/**",
                 "/v2/api-docs-ext/**",
                 "/swagger-resources/**"

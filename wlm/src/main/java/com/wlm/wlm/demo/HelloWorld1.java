@@ -1,4 +1,4 @@
-package com.wlm.wlm.jfarmDemo;
+package com.wlm.wlm.demo;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;

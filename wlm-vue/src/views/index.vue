@@ -38,10 +38,12 @@ import api from '@/webapi'
 import _ from 'lodash'
 
 export default {
+  // 添加菜单界面  其中key为数据库中指定的menu_fun
   components: {
     deptIndex: () => ({ component: import('@/views/dept/index.vue') }),
     userIndex: () => ({ component: import('@/views/user/index.vue') }),
-    roleIndex: () => ({ component: import('@/views/role/index.vue') })
+    roleIndex: () => ({ component: import('@/views/role/index.vue') }),
+    menuIndex: () => ({ component: import('@/views/menu/index.vue') })
   },
   name: 'HelloWorld',
   data () {

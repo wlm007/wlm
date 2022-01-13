@@ -1,4 +1,4 @@
-package com.wlm.wlm.jfarmDemo;
+package com.wlm.wlm.demo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,21 +6,19 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author wuliming
- * @date 2021/7/19 11:35
+ * @date 2021/7/19 11:26
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dog implements Cloneable{
+public class People implements Cloneable{
 
-    private People people;
+    private int age;
 
     private String name;
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        Dog dog = (Dog) super.clone();
-        dog.people = (People) people.clone();
-        return dog;
+        return super.clone();
     }
 }

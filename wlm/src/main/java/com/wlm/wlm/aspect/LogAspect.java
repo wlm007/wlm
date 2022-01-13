@@ -6,6 +6,12 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 /**
  * @author wuliming
@@ -21,15 +27,18 @@ public class LogAspect {
     @Before(PATH_INFO)
     public void before(JoinPoint point, ApiOperation annotation) {
         log.info("请求路径说明: " + annotation.value());
-        Object[] args = point.getArgs();
-        StringBuilder sb = new StringBuilder("参数列表：");
-        for (Object arg : args) {
-            if (arg instanceof String || arg instanceof Integer) {
-                sb.append(arg).append(",");
-            } else {
-                sb.append(arg.toString()).append(",");
-            }
+
+        RequestAttributes requestAttribute = RequestContextHolder.getRequestAttributes();
+        if (requestAttribute == null) {
+            return;
         }
-        log.info(sb.toString());
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttribute).getRequest();
+        // 记录下请求内容
+        log.info("URL : " + request.getRequestURL().toString());
+        log.info("HTTP_METHOD : " + request.getMethod());
+        log.info("IP : " + request.getRemoteAddr());
+        //下面这个getSignature().getDeclaringTypeName()是获取包+类名的   然后后面的joinPoint.getSignature.getName()获取了方法名
+        log.info("CLASS_METHOD : " + point.getSignature().getDeclaringTypeName() + "." + point.getSignature().getName());
+        log.info("ARGS : " + Arrays.toString(point.getArgs()));
     }
 }

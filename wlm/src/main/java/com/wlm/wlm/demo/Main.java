@@ -1,4 +1,4 @@
-package com.wlm.wlm.jfarmDemo;
+package com.wlm.wlm.demo;
 
 import javax.swing.*;
 import java.awt.*;
