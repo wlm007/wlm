@@ -1,6 +1,6 @@
 package com.wlm.wlm.demo;
 
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysUser;
 
 import java.sql.*;
 

@@ -1,7 +1,7 @@
-package com.wlm.wlm.service;
+package com.wlm.wlm.service.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wlm.wlm.dao.SysMenuDao;
+import com.wlm.wlm.dao.SysMenuMapper;
 import com.wlm.wlm.vo.SysMenuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @Service
 public class SysMenuServiceImpl {
     @Autowired
-    private SysMenuDao sysMenuDao;
+    private SysMenuMapper sysMenuMapper;
 
     public List<SysMenuVo> list() {
-        return sysMenuDao.selectList(new LambdaQueryWrapper<>())
+        return sysMenuMapper.selectList(new LambdaQueryWrapper<>())
                 .stream().map(SysMenuVo::new).collect(Collectors.toList());
     }
 }

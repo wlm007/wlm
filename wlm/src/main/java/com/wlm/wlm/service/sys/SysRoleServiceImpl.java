@@ -1,4 +1,4 @@
-package com.wlm.wlm.service;
+package com.wlm.wlm.service.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -7,7 +7,7 @@ import com.wlm.wlm.config.ApiException;
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.dao.SysRoleMapper;
-import com.wlm.wlm.model.SysRole;
+import com.wlm.wlm.model.sys.SysRole;
 import com.wlm.wlm.params.sysRole.SysRoleListParams;
 import com.wlm.wlm.params.sysRole.SysRoleSaveParams;
 import com.wlm.wlm.vo.SysRoleVo;

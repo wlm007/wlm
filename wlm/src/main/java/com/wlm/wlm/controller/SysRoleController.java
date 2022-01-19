@@ -5,7 +5,7 @@ import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.params.sysRole.SysRoleListParams;
 import com.wlm.wlm.params.sysRole.SysRoleSaveParams;
-import com.wlm.wlm.service.SysRoleServiceImpl;
+import com.wlm.wlm.service.sys.SysRoleServiceImpl;
 import com.wlm.wlm.vo.SysRoleVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -6,7 +6,7 @@ import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.params.sysUser.SysUserAddParams;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserUpdateParams;
-import com.wlm.wlm.service.SysUserServiceImpl;
+import com.wlm.wlm.service.sys.SysUserServiceImpl;
 import com.wlm.wlm.vo.SysUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,4 +1,4 @@
-package com.wlm.wlm.model;
+package com.wlm.wlm.model.sys;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

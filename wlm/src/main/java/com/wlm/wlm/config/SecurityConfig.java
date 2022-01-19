@@ -4,7 +4,7 @@ import com.wlm.wlm.security.LoginAccessDeniedHandler;
 import com.wlm.wlm.security.LoginAuthenticationEntryPoint;
 import com.wlm.wlm.security.LoginFailureHandler;
 import com.wlm.wlm.security.LoginSuccessHandler;
-import com.wlm.wlm.service.SysUserServiceImpl;
+import com.wlm.wlm.service.sys.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
                 "/doc.html/**",
                 "/",
+                "/wx/**",
                 "/sysUser/register",
                 "/swagger/**",
                 "/swagger-ui.html",

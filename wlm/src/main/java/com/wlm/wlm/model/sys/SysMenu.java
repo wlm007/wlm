@@ -1,4 +1,4 @@
-package com.wlm.wlm.model;
+package com.wlm.wlm.model.sys;
 
 import lombok.Data;
 

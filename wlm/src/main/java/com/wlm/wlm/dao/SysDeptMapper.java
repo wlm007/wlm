@@ -1,7 +1,7 @@
 package com.wlm.wlm.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.wlm.wlm.model.SysDept;
+import com.wlm.wlm.model.sys.SysDept;
 import com.wlm.wlm.vo.SysDeptVo;
 import org.apache.ibatis.annotations.Param;
 

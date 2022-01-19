@@ -4,7 +4,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.params.sysDept.SysDeptListParams;
 import com.wlm.wlm.params.sysDept.SysDeptSaveParams;
-import com.wlm.wlm.service.SysDeptServiceImpl;
+import com.wlm.wlm.service.sys.SysDeptServiceImpl;
 import com.wlm.wlm.vo.SysDeptVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

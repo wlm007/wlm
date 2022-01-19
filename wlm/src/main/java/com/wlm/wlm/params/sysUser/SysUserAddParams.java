@@ -1,6 +1,6 @@
 package com.wlm.wlm.params.sysUser;
 
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

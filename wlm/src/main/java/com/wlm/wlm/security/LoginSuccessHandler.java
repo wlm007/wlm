@@ -3,7 +3,7 @@ package com.wlm.wlm.security;
 import com.alibaba.fastjson.JSON;
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.dto.SysUserDto;
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysUser;
 import com.wlm.wlm.util.JwtUtils;
 import com.wlm.wlm.util.SecurityUtils;
 import com.wlm.wlm.vo.SysUserVo;

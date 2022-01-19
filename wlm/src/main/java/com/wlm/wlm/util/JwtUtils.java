@@ -1,7 +1,7 @@
 package com.wlm.wlm.util;
 
 import com.wlm.wlm.config.ApiException;
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

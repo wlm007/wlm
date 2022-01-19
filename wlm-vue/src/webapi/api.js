@@ -7,7 +7,8 @@ axios.defaults.withCredentials = true
 
 // 创建全局api访问的实列
 const webapi = axios.create({
-  baseURL: 'http://localhost:8001/wlm',
+  baseURL: 'http://localhost:8001/',
+  // baseURL: 'http://localhost:8002/',
   timeout: 5000,
   withCredentials: true,
   headers: {

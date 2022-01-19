@@ -1,6 +1,6 @@
 package com.wlm.wlm.vo;
 
-import com.wlm.wlm.model.SysMenu;
+import com.wlm.wlm.model.sys.SysMenu;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

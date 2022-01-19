@@ -3,7 +3,7 @@ package com.wlm.wlm.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.vo.SysUserVo;
 import org.apache.ibatis.annotations.Param;

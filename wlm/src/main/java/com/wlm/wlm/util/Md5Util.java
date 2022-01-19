@@ -1,7 +1,7 @@
 package com.wlm.wlm.util;
 
 import com.alibaba.fastjson.JSON;
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysUser;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;

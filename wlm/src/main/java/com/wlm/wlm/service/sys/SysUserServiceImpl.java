@@ -1,4 +1,4 @@
-package com.wlm.wlm.service;
+package com.wlm.wlm.service.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,8 +9,8 @@ import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.dao.SysRoleMapper;
 import com.wlm.wlm.dao.SysUserMapper;
 import com.wlm.wlm.dto.SysUserDto;
-import com.wlm.wlm.model.SysRole;
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysRole;
+import com.wlm.wlm.model.sys.SysUser;
 import com.wlm.wlm.params.sysUser.SysUserAddParams;
 import com.wlm.wlm.params.sysUser.SysUserListParams;
 import com.wlm.wlm.params.sysUser.SysUserUpdateParams;

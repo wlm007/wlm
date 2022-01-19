@@ -1,7 +1,7 @@
 package com.wlm.wlm.dto;
 
-import com.wlm.wlm.model.SysRole;
-import com.wlm.wlm.model.SysUser;
+import com.wlm.wlm.model.sys.SysRole;
+import com.wlm.wlm.model.sys.SysUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

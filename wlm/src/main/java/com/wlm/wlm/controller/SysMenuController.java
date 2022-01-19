@@ -2,7 +2,7 @@ package com.wlm.wlm.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.wlm.wlm.config.ApiResult;
-import com.wlm.wlm.service.SysMenuServiceImpl;
+import com.wlm.wlm.service.sys.SysMenuServiceImpl;
 import com.wlm.wlm.vo.SysMenuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
