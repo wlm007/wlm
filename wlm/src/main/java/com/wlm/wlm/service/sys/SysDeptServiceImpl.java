@@ -2,7 +2,7 @@ package com.wlm.wlm.service.sys;
 
 import com.wlm.wlm.config.ApiException;
 import com.wlm.wlm.config.ApiResult;
-import com.wlm.wlm.dao.SysDeptMapper;
+import com.wlm.wlm.dao.sys.SysDeptMapper;
 import com.wlm.wlm.model.sys.SysDept;
 import com.wlm.wlm.params.sysDept.SysDeptListParams;
 import com.wlm.wlm.params.sysDept.SysDeptSaveParams;

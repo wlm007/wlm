@@ -1,4 +1,4 @@
-package com.wlm.wlm.dao;
+package com.wlm.wlm.dao.sys;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wlm.wlm.model.sys.SysMenu;
@@ -9,4 +9,6 @@ import com.wlm.wlm.model.sys.SysMenu;
  * @date 2021-10-19
  */
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
+
+    void deleteAllById(Integer id);
 }

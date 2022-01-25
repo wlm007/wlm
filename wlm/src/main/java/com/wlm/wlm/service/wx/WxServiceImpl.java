@@ -2,7 +2,7 @@ package com.wlm.wlm.service.wx;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wlm.wlm.dao.WxTokenMapper;
+import com.wlm.wlm.dao.wx.WxTokenMapper;
 import com.wlm.wlm.enums.FileEnum;
 import com.wlm.wlm.enums.WxEventEnums;
 import com.wlm.wlm.enums.WxMsgTypeEnums;
@@ -44,16 +44,6 @@ public class WxServiceImpl {
      * 菜单创建  1000 次/天
      */
     private String menuCreateUrl = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
-
-    /**
-     * 获取用户列表
-     */
-    private String getUserListUrl = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
-
-    /**
-     * 获取用户基本信息  500000 次/天
-     */
-    private String accessUserUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID";
 
     /**
      * 发送模板消息
@@ -143,8 +133,24 @@ public class WxServiceImpl {
         this.wxTokenMapper = wxTokenMapper;
     }
 
-    public String getAccessToken(String appId, String appSecret) {
+    private WxUsersServiceImpl usersService;
+
+    @Autowired
+    public void setUsersService(WxUsersServiceImpl usersService) {
+        this.usersService = usersService;
+    }
+
+    private WxProperties wxProperties;
+
+    @Autowired
+    public void setWxProperties(WxProperties wxProperties) {
+        this.wxProperties = wxProperties;
+    }
+
+    public String getAccessToken() {
         Long now = System.currentTimeMillis();
+        String appId = wxProperties.getAppId();
+        String appSecret = wxProperties.getAppSecret();
         // 微信token失效时间为7200秒 在此时间内再次请求获取token时直接返回上一次保存的token
         WxToken wxToken = wxTokenMapper.selectById(1);
         if (wxToken == null) {
@@ -268,7 +274,7 @@ public class WxServiceImpl {
         conn.disconnect();
     }
 
-    private JSONObject httpsRequest(String url, String questType, String outputStr) {
+    public JSONObject httpsRequest(String url, String questType, String outputStr) {
         StringBuilder sb = new StringBuilder();
         JSONObject result = null;
         try {
@@ -294,6 +300,7 @@ public class WxServiceImpl {
             }
             readResultInput(sb, conn);
             System.out.println("-------------结束请求微信公众号后台-----------------------");
+            System.out.println("-------------后台返回结果:\\\n" + sb);
             result = JSON.parseObject(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -370,6 +377,7 @@ public class WxServiceImpl {
         System.out.println("微信发送消息内容: " + receiverMsg);
         String msgType = receiverMsg.get(WxDicts.WX_MSG_TYPE);
         String resStr = "";
+        boolean saveUser = false;
 
         // 处理点击事件消息
         if (WxMsgTypeEnums.WX_MSG_TYPE_EVENT.getMsgType().equals(msgType)) {
@@ -408,6 +416,8 @@ public class WxServiceImpl {
                 textMessage.setContent("感谢您的订阅");
                 this.setMsgData(receiverMsg, textMessage, WxMsgTypeEnums.WX_MSG_TYPE_TEXT.getMsgType());
                 resStr = MessageUtils.textMessageToXml(textMessage);
+                // 事件关注后将关注人保存到数据库
+                saveUser = true;
             } else if (WxEventEnums.WX_EVENT_TYPE_UNSUBSCRIBE.getEventType().equals(eventType)) {
                 // 取消关注
                 TextMessage textMessage = new TextMessage();
@@ -437,6 +447,10 @@ public class WxServiceImpl {
             response.getWriter().write(resStr);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (saveUser) {
+            String fromUser = receiverMsg.get(WxDicts.WX_FROM_USER_NAME);
+            usersService.saveUser(fromUser);
         }
     }
 
@@ -523,11 +537,6 @@ public class WxServiceImpl {
 
     public JSONObject getWeiXinIpList() {
         String url = getWeiXinUrlList.replace(ACCESS_TOKEN, token);
-        return httpsRequest(url, GET, null);
-    }
-
-    public JSONObject getUserList(String openId) {
-        String url = getUserListUrl.replace(ACCESS_TOKEN, token).replace("NEXT_OPENID", openId == null ? "" : openId);
         return httpsRequest(url, GET, null);
     }
 

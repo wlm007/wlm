@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlm.wlm.dao.wx.WxUsersMapper">
+  <select id="findWxUsers" resultType="com.wlm.wlm.model.wx.WxUsers">
+    select id, subscribe, openid, language, subscribe_time, unionid, remark, groupid, subscribe_scene, qr_scene, qr_scene_str, tagid_list
+    from wx_users
+  </select>
+</mapper>

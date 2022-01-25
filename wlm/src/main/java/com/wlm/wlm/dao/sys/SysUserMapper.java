@@ -1,4 +1,4 @@
-package com.wlm.wlm.dao;
+package com.wlm.wlm.dao.sys;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

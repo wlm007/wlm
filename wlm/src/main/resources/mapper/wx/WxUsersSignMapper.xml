@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlm.wlm.dao.wx.WxUsersSignMapper">
+    <insert id="save">
+        insert wx_users_sign (id, name) values (#{usersSign.id}, #{usersSign.name})
+    </insert>
+    <update id="updateNameById">
+        update wx_users_sign set name = #{signName} where id = #{id}
+    </update>
+    <select id="userSignList" resultType="com.wlm.wlm.model.wx.WxUsersSign">
+        select id, name, count from wx_users_sign order by id desc
+    </select>
+</mapper>

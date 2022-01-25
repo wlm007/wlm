@@ -2,9 +2,14 @@ package com.wlm.wlm.controller.wx;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.wlm.wlm.config.ApiResult;
+import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.model.wx.WxMenu;
-import com.wlm.wlm.model.wx.WxProperties;
+import com.wlm.wlm.model.wx.WxUsers;
+import com.wlm.wlm.model.wx.WxUsersSign;
+import com.wlm.wlm.params.wx.SignToUserParams;
 import com.wlm.wlm.service.wx.WxServiceImpl;
+import com.wlm.wlm.service.wx.WxUsersServiceImpl;
 import com.wlm.wlm.util.XmlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 /**
  * 微信公众号相关请求处理
@@ -30,18 +36,18 @@ import java.io.FileInputStream;
 @RequestMapping("/wx")
 public class WxController {
 
-    private WxProperties wxProperties;
-
-    @Autowired
-    public void setWxProperties(WxProperties wxProperties) {
-        this.wxProperties = wxProperties;
-    }
-
     private WxServiceImpl wxService;
 
     @Autowired
     public void setWxService(WxServiceImpl wxService) {
         this.wxService = wxService;
+    }
+
+    private WxUsersServiceImpl usersService;
+
+    @Autowired
+    public void setUsersService(WxUsersServiceImpl usersService) {
+        this.usersService = usersService;
     }
 
     @GetMapping("/weixin")
@@ -59,7 +65,7 @@ public class WxController {
     @ApiOperationSupport(author = "wlm", order = 1)
     @GetMapping("/get_token")
     public String getToken() {
-        return wxService.getAccessToken(wxProperties.getAppId(), wxProperties.getAppSecret());
+        return wxService.getAccessToken();
     }
 
     @ApiOperation(value = "创建自定义菜单")
@@ -144,8 +150,10 @@ public class WxController {
     @ApiOperation(value = "获取微信公众号关注用户列表")
     @ApiOperationSupport(author = "wlm", order = 10)
     @GetMapping("/get_user_list")
-    public JSONObject getUserList(@RequestParam(value = "openId", required = false) String openId) {
-        return wxService.getUserList(openId);
+    public ApiResult<PageInfoResult<List<WxUsers>>> getUserList(
+            @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+        return new ApiResult<>(usersService.getUserList(pageNo, pageSize));
     }
 
     @ApiOperation(value = "获取媒体模板")
@@ -163,4 +171,80 @@ public class WxController {
         return wxService.getWxReplyRules();
     }
 
+
+    @ApiOperation(value = "用户备注")
+    @ApiOperationSupport(author = "wlm", order = 13)
+    @GetMapping("/user_remark")
+    public ApiResult<Object> remarkUser(@RequestParam(value = "openId") String openId,
+                                 @RequestParam(value = "remark") String remark) {
+        usersService.setUserRemark(openId, remark);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "添加用户标签")
+    @ApiOperationSupport(author = "wlm", order = 14)
+    @GetMapping("/add_user_sign")
+    public ApiResult<Object> addUserSign(@RequestParam(value = "signName") String signName) {
+        usersService.addUserSign(signName);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "获取用户标签列表")
+    @ApiOperationSupport(author = "wlm", order = 15)
+    @GetMapping("/get_user_sign_list")
+    public ApiResult<PageInfoResult<List<WxUsersSign>>> userSignList(
+            @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+        return new ApiResult<>(usersService.userSignList(pageNo, pageSize));
+    }
+
+    @ApiOperation(value = "编辑用户标签")
+    @ApiOperationSupport(author = "wlm", order = 16)
+    @GetMapping("/edit_user_sign")
+    public ApiResult<Object> editUserSign(
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "signName") String signName) {
+        usersService.editUserSign(id, signName);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "删除用户标签")
+    @ApiOperationSupport(author = "wlm", order = 17)
+    @GetMapping("/delete_user_sign/{id}")
+    public ApiResult<Object> deleteUserSign(@PathVariable("id") Integer id) {
+        usersService.deleteUserSign(id);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "获取用户身上的标签列表")
+    @ApiOperationSupport(author = "wlm", order = 18)
+    @GetMapping("/get_users_sign_list")
+    public ApiResult<List<WxUsersSign>> getUsersSignList(@RequestParam(value = "openid") String openid) {
+        return new ApiResult<>(usersService.getUsersSignList(openid));
+    }
+
+    @ApiOperation(value = "获取标签下粉丝列表")
+    @ApiOperationSupport(author = "wlm", order = 19)
+    @GetMapping("/get_users_by_sign")
+    public ApiResult<List<WxUsers>> getUserListBySign(
+            @RequestParam(value = "signId") Integer signId,
+            @RequestParam(value = "openid", required = false) String openid) {
+        return new ApiResult<>(usersService.getUserListBySign(signId, openid));
+    }
+
+    @ApiOperation(value = "批量给用户打标签")
+    @ApiOperationSupport(author = "wlm", order = 20)
+    @PostMapping("/sign_to_user")
+    public ApiResult<Object> signToUser(@RequestBody SignToUserParams params) {
+        usersService.signToUser(params);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "批量给用户取消标签")
+    @ApiOperationSupport(author = "wlm", order = 21)
+    @PostMapping("/cancel_sign_to_user")
+    public ApiResult<Object> cancelSignToUser(@RequestBody SignToUserParams params) {
+        usersService.cancelSignToUser(params);
+        return new ApiResult<>();
+    }
 }

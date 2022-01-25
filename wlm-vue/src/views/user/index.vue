@@ -12,7 +12,7 @@
       </el-form>
     </div>
     <div class="user__index__table">
-      <el-table :data="data" border stripe height="650">
+      <el-table :data="data" border stripe height="660">
         <el-table-column prop="username" label="用户姓名" align="center"></el-table-column>
         <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
         <el-table-column prop="age" label="年龄" align="center"></el-table-column>
@@ -215,12 +215,6 @@ export default{
 </script>
 
 <style scoped>
-.user__index {
-  padding: 30px;
-  height: 96%;
-  width: 96%;
-  overflow: hidden;
-}
 .user__index__table {
   height: calc(100% - 100px);
 }

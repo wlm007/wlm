@@ -367,9 +367,8 @@ export default{
 
 <style scoped>
 .dept__index {
-  padding: 30px;
-  height: 93%;
-  width: 96%;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -381,12 +380,12 @@ export default{
   margin: auto;
 }
 .dept__tree {
-  width: 26%;
+  width: 29%;
   height: 100%;
   display: inline-block;
   position: absolute;
-  top: 40px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
 }
 .dept__tree__show {
   margin-top: 20px;
@@ -396,12 +395,12 @@ export default{
   height: 100%;
   display: inline-block;
   position: absolute;
-  top: 20px;
-  right: 30px;
+  top: 0px;
+  right: 0px;
 }
 .footer_pagination {
   position: absolute;
-  bottom: 40px;
+  bottom: 0px;
   width: 100%;
 }
 .select_role_show {

@@ -12,7 +12,7 @@
       </el-form>
     </div>
     <div class="role__index__table">
-      <el-table :data="data" border stripe height="650">
+      <el-table :data="data" border stripe height="660">
         <el-table-column prop="id" label="ID" align="center"></el-table-column>
         <el-table-column prop="roleNo" label="角色编号" align="center"></el-table-column>
         <el-table-column prop="roleName" label="角色名称" align="center"></el-table-column>
@@ -162,14 +162,8 @@ export default{
 </script>
 
 <style scoped>
-.role__index {
-  padding: 30px;
-  height: 96%;
-  width: 96%;
-  overflow: hidden;
-}
 .role__index__table {
-  height: calc(100% - 100px);
+  height: calc(100% - 80px);
 }
 .dialog__form {
   width: 500px;

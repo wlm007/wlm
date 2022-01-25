@@ -30,6 +30,7 @@ public class LoginAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         logger.info(">>>>>>>>>>>>> logout time");
+        logger.info(">>>>>>>>>>>>> url: {}", request.getRequestURI());
         logger.error(e.getMessage());
         securityUtils.sendError(response, HttpServletResponse.SC_OK, ApiResult.NOT_LOGIN_OR_OUT, "登录超时或未登录，请重新登录");
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wlm.wlm.dao.SysUserMapper">
+<mapper namespace="com.wlm.wlm.dao.sys.SysUserMapper">
 <!-- 开启或关闭一级缓存   -->
 <!--    <cache/>-->
     <select id="findUserListByRoleNo" resultType="com.wlm.wlm.vo.SysUserVo">

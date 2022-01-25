@@ -1,4 +1,4 @@
-package com.wlm.wlm.controller;
+package com.wlm.wlm.controller.sys;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.wlm.wlm.config.ApiResult;

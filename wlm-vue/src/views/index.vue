@@ -9,7 +9,7 @@
           <el-button type="text" @click="logout">退出</el-button>
         </div>
       </el-header>
-      <el-main>
+      <el-main class="home_main">
         <el-container>
           <el-aside width="200px">
             <el-menu>
@@ -22,10 +22,9 @@
             </el-menu>
           </el-aside>
           <el-container>
-            <el-main>
+            <el-main class="components_main">
               <component v-if="isShow" :is="menuId"></component>
             </el-main>
-            <!-- <el-footer>Footer</el-footer> -->
           </el-container>
         </el-container>
       </el-main>
@@ -36,6 +35,7 @@
 <script>
 import api from '@/webapi'
 import _ from 'lodash'
+import mqtt from 'mqtt'
 
 export default {
   // 添加菜单界面  其中key为数据库中指定的menu_fun
@@ -43,7 +43,9 @@ export default {
     deptIndex: () => ({ component: import('@/views/dept/index.vue') }),
     userIndex: () => ({ component: import('@/views/user/index.vue') }),
     roleIndex: () => ({ component: import('@/views/role/index.vue') }),
-    menuIndex: () => ({ component: import('@/views/menu/index.vue') })
+    menuIndex: () => ({ component: import('@/views/menu/index.vue') }),
+    focusUsers: () => ({ component: import('@/views/wx/users/index.vue') }),
+    userSign: () => ({ component: import('@/views/wx/users/signs.vue') })
   },
   name: 'HelloWorld',
   data () {
@@ -90,6 +92,24 @@ export default {
       setTimeout(() => {
         this.isShow = true
       }, 500)
+    },
+    mqttConn () {
+      this.client = mqtt.connect('ws://localhost:5672/mqtt', {
+        username: 'guest',
+        password: 'guest'
+      })
+      this.client.on('connect', e => {
+        console.log('连接成功', e)
+        this.client.subscribe(this.mtopic, err => {
+          if (!err) {
+            console.log('订阅成功:' + this.mtopic)
+          }
+        })
+      })
+      this.client.on('message', (topic, message) => {
+        console.log('接受消息成功, 主题为:', topic)
+        this.msg = message
+      })
     }
   }
 }
@@ -101,10 +121,20 @@ export default {
   width: 100%;
   height: 100%;
 }
+.home_main {
+  padding: 0;
+  overflow: hidden;
+}
 .home_header_user_info {
   position: absolute;
   right: 20px;
   top: 10px;
+}
+.components_main {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  overflow: hidden;
 }
 </style>
 
@@ -130,8 +160,4 @@ export default {
   height: 100%;
 }
 
-.home_index .el-main {
-  padding: 0;
-  overflow: hidden;
-}
 </style>

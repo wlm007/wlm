@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.config.ApiException;
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
-import com.wlm.wlm.dao.SysRoleMapper;
+import com.wlm.wlm.dao.sys.SysRoleMapper;
 import com.wlm.wlm.model.sys.SysRole;
 import com.wlm.wlm.params.sysRole.SysRoleListParams;
 import com.wlm.wlm.params.sysRole.SysRoleSaveParams;
