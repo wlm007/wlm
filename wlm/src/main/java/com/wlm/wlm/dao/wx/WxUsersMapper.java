@@ -12,4 +12,6 @@ import com.wlm.wlm.model.wx.WxUsers;
 public interface WxUsersMapper extends BaseMapper<WxUsers> {
 
     IPage<WxUsers> findWxUsers(Page<WxUsers> page);
+
+    IPage<WxUsers> getBlackList(Page<WxUsers> page);
 }

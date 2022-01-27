@@ -7,15 +7,22 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wlm.wlm.config.ApiException;
 import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.config.PageInfoResult;
+import com.wlm.wlm.dao.wx.WxUsersBindSignMapper;
 import com.wlm.wlm.dao.wx.WxUsersMapper;
 import com.wlm.wlm.dao.wx.WxUsersSignMapper;
 import com.wlm.wlm.model.wx.WxUsers;
+import com.wlm.wlm.model.wx.WxUsersBindSign;
 import com.wlm.wlm.model.wx.WxUsersSign;
+import com.wlm.wlm.params.wx.BatchAddBlackParams;
 import com.wlm.wlm.params.wx.SignToUserParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 微信关注用户service
@@ -46,6 +53,9 @@ public class WxUsersServiceImpl {
     public void setUsersSignMapper(WxUsersSignMapper usersSignMapper) {
         this.usersSignMapper = usersSignMapper;
     }
+
+    @Resource
+    private WxUsersBindSignMapper wxUsersBindSignMapper;
 
     String errcode = "errcode";
 
@@ -174,5 +184,38 @@ public class WxUsersServiceImpl {
         if (result.getInteger(errcode) != 0) {
             throw new ApiException(ApiResult.ERROR, result.getString("errmsg"));
         }
+    }
+
+    public void batchAddBlackList(BatchAddBlackParams params) {
+        if (params.getOpenid_list().size() <= 0) {
+            throw new ApiException(ApiResult.ERROR, "请选择要加入黑名单的用户");
+        }
+        String batchAddBlackListUrl = "https://api.weixin.qq.com/cgi-bin/tags/members/batchblacklist?access_token=ACCESS_TOKEN";
+        String url = batchAddBlackListUrl.replace(wxService.getACCESS_TOKEN(), wxService.getAccessToken());
+        JSONObject result = wxService.httpsRequest(url, wxService.getPOST(), JSONObject.toJSONString(params));
+        if (result.getInteger(errcode) != 0) {
+            throw new ApiException(ApiResult.ERROR, result.getString("errmsg"));
+        }
+        List<WxUsersBindSign> bindSignList = params.getOpenid_list().stream().map(o -> new WxUsersBindSign(o, 1)).collect(Collectors.toList());
+        wxUsersBindSignMapper.batchInsert(bindSignList);
+    }
+
+    public void batchDelBlackList(BatchAddBlackParams params) {
+        if (params.getOpenid_list().size() <= 0) {
+            throw new ApiException(ApiResult.ERROR, "请选择要移除黑名单的用户");
+        }
+        String batchDelBlackListUrl = "https://api.weixin.qq.com/cgi-bin/tags/members/batchunblacklist?access_token=ACCESS_TOKEN";
+        String url = batchDelBlackListUrl.replace(wxService.getACCESS_TOKEN(), wxService.getAccessToken());
+        JSONObject result = wxService.httpsRequest(url, wxService.getPOST(), JSONObject.toJSONString(params));
+        if (result.getInteger(errcode) != 0) {
+            throw new ApiException(ApiResult.ERROR, result.getString("errmsg"));
+        }
+        wxUsersBindSignMapper.batchDelete(params.getOpenid_list());
+    }
+
+    public PageInfoResult<List<WxUsers>> getBlackList(Integer pageNo, Integer pageSize) {
+        Page<WxUsers> page = new Page<>(pageNo, pageSize);
+        IPage<WxUsers> result = usersMapper.getBlackList(page);
+        return new PageInfoResult<>(result.getTotal(), result.getRecords());
     }
 }

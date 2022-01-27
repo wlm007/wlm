@@ -7,6 +7,7 @@ import com.wlm.wlm.config.PageInfoResult;
 import com.wlm.wlm.model.wx.WxMenu;
 import com.wlm.wlm.model.wx.WxUsers;
 import com.wlm.wlm.model.wx.WxUsersSign;
+import com.wlm.wlm.params.wx.BatchAddBlackParams;
 import com.wlm.wlm.params.wx.SignToUserParams;
 import com.wlm.wlm.service.wx.WxServiceImpl;
 import com.wlm.wlm.service.wx.WxUsersServiceImpl;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
@@ -246,5 +248,31 @@ public class WxController {
     public ApiResult<Object> cancelSignToUser(@RequestBody SignToUserParams params) {
         usersService.cancelSignToUser(params);
         return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "拉黑用户(一次最多20)")
+    @ApiOperationSupport(author = "wlm", order = 22)
+    @PostMapping("/batch_add_black")
+    public ApiResult<Object> batchAddBlackList(@Valid @RequestBody BatchAddBlackParams params) {
+        usersService.batchAddBlackList(params);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "取消拉黑用户(一次最多20)")
+    @ApiOperationSupport(author = "wlm", order = 23)
+    @PostMapping("/batch_del_black")
+    public ApiResult<Object> batchDelBlackList(@Valid @RequestBody BatchAddBlackParams params) {
+        usersService.batchDelBlackList(params);
+        return new ApiResult<>();
+    }
+
+    @ApiOperation(value = "获取拉黑用户")
+    @ApiOperationSupport(author = "wlm", order = 24)
+    @GetMapping("/get_black_list")
+    public ApiResult<PageInfoResult<List<WxUsers>>> getBlackList(
+            @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
+    ) {
+        return new ApiResult<>(usersService.getBlackList(pageNo, pageSize));
     }
 }

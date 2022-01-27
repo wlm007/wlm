@@ -77,9 +77,17 @@ create table wlm.wx_users (
     primary key (id)
 );
 
-create table wlm.wx_users_sign (
-    id int comment '主键',
-    name varchar(50) not null comment '标签名称',
+create table wlm.wx_users_sign
+(
+    id    int comment '主键',
+    name  varchar(50) not null comment '标签名称',
     count int default 0 comment '此标签下粉丝数',
     primary key (id)
-)
+);
+
+create table wlm.wx_users_bind_sign (
+    id  int auto_increment comment '主键',
+    openid varchar(50) not null comment '用户openid',
+    tag_id int not null comment '标签id',
+    primary key (id)
+);

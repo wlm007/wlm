@@ -5,4 +5,8 @@
     select id, subscribe, openid, language, subscribe_time, unionid, remark, groupid, subscribe_scene, qr_scene, qr_scene_str, tagid_list
     from wx_users
   </select>
+    <select id="getBlackList" resultType="com.wlm.wlm.model.wx.WxUsers">
+      select id, subscribe, openid, language, subscribe_time, unionid, remark, groupid, subscribe_scene, qr_scene, qr_scene_str, tagid_list
+      from wx_users a where openid in (select b.openid from wx_users_bind_sign b where b.tag_id = 1)
+    </select>
 </mapper>
