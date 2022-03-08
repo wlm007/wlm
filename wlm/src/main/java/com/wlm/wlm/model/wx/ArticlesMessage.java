@@ -3,6 +3,8 @@ package com.wlm.wlm.model.wx;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 图文消息
  * @author wuliming
@@ -12,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ArticlesMessage extends BaseMessage{
 
-    private Integer ArticleCount;
+    private int ArticleCount;
 
-    private Articles Articles;
+    private List<Articles> Articles;
 }

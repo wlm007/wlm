@@ -72,7 +72,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui.html",
                 "/v2/**",
                 "/swagger-resources/**",
-                "/wx/**"
+                "/wx/**",
+                "/mqtt/**"
                 );
     }
 

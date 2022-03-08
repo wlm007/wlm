@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.wlm.wlm.model.wx.Articles;
 import com.wlm.wlm.model.wx.ArticlesMessage;
 import com.wlm.wlm.model.wx.ImageMessage;
 import com.wlm.wlm.model.wx.TextMessage;
@@ -136,6 +137,7 @@ public class MessageUtils {
      */
     public static String articlesMessageToXml(ArticlesMessage message) {
         xStream.alias(XML, message.getClass());
+        xStream.alias("item", Articles.class);
         return xStream.toXML(message);
     }
 }

@@ -1,8 +1,16 @@
 <template>
   <div class="wx_users_index">
+    <div class="wx_users_form">
+      <el-form ref="indexForm" :inline="true">
+        <el-form-item>
+          <el-button type="primary" @click="getList()">订阅用户</el-button>
+          <el-button type="primary" @click="getBlackList()">黑名单</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="wx_users_index_table">
       <el-table
-        :data="list" border stripe height="730"
+        :data="list" border stripe height="670"
         row-key="id"
         >
         <el-table-column prop="id" label="ID" align="center" width="40"></el-table-column>
@@ -58,6 +66,13 @@ export default {
   methods: {
     async getList () {
       const res = await api.wxUsers.list(this.pageNo, this.pageSize)
+      if (res.data.code === 200) {
+        this.list = res.data.data.data
+        this.total = res.data.data.total
+      }
+    },
+    async getBlackList () {
+      const res = await api.wxUsers.getBlackList(this.pageNo, this.pageSize)
       if (res.data.code === 200) {
         this.list = res.data.data.data
         this.total = res.data.data.total

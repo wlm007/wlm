@@ -9,6 +9,11 @@ import lombok.Data;
 @Data
 public class Articles {
 
-    private ArticlesItem item;
+    private String Title;
 
+    private String Description;
+
+    private String PicUrl;
+
+    private String Url;
 }

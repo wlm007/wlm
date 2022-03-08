@@ -60,6 +60,7 @@ public class WxController {
 
     @PostMapping("/weixin")
     public void msgWeiXin(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("接收到了微信发来的请求");
         wxService.handleWxMsg(request, response);
     }
 
@@ -111,7 +112,8 @@ public class WxController {
     @ApiOperationSupport(author = "wlm", order = 4)
     @PostMapping("/upload")
     public JSONObject upload(@RequestParam("file") MultipartFile file) {
-        return wxService.commUpload(file, String.valueOf(System.currentTimeMillis()), "demo");
+        String url = wxService.getUploadImgUrl().replace(wxService.getACCESS_TOKEN(), wxService.getAccessToken()).replace("TYPE", "image");
+        return wxService.commUpload(file, String.valueOf(System.currentTimeMillis()), "demo", url);
     }
 
     @ApiOperation(value = "微信素材列表获取")

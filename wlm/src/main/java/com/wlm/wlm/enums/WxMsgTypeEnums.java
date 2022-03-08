@@ -20,7 +20,7 @@ public enum WxMsgTypeEnums {
     WX_MSG_TYPE_VOICE("voice", "语音"),
     WX_MSG_TYPE_VIDEO("video", "视频"),
     WX_MSG_TYPE_MUSIC("music", "音乐"),
-    WX_MSG_TYPE_NEWS("mews", "图文"),
+    WX_MSG_TYPE_NEWS("news", "图文"),
     WX_MSG_TYPE_SHORT_VIDEO("shortvideo", "小视频"),
     WX_MSG_TYPE_LOCATION("location", "地理位置"),
     WX_MSG_TYPE_LINK("link", "链接"),

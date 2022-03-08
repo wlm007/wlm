@@ -5,6 +5,9 @@ export default {
   list (pageNo, pageSize) {
     return webapi.get(`/wx/get_user_list?pageNo=${pageNo}&pageSize=${pageSize}`)
   },
+  getBlackList (pageNo, pageSize) {
+    return webapi.get(`/wx/get_black_list?pageNo=${pageNo}&pageSize=${pageSize}`)
+  },
   userRemark (openId, remark) {
     return webapi.get(`/wx/user_remark?openId=${openId}&remark=${remark}`)
   },

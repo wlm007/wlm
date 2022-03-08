@@ -2,6 +2,8 @@ package com.wlm.wlm.service.wx;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wlm.wlm.config.ApiException;
+import com.wlm.wlm.config.ApiResult;
 import com.wlm.wlm.dao.wx.WxTokenMapper;
 import com.wlm.wlm.enums.FileEnum;
 import com.wlm.wlm.enums.WxEventEnums;
@@ -9,6 +11,7 @@ import com.wlm.wlm.enums.WxMsgTypeEnums;
 import com.wlm.wlm.model.wx.*;
 import com.wlm.wlm.params.wx.WxMaterialListParams;
 import com.wlm.wlm.util.MessageUtils;
+import com.wlm.wlm.util.StringUtils;
 import com.wlm.wlm.util.WxDicts;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -186,13 +191,12 @@ public class WxServiceImpl {
         return httpsRequest(url,POST, menuJson);
     }
 
-    private String imageMediaId = "0EXTCJ7mnwSk3SHfVjyH7Ch_lbqAxrlfNHIIshs1d1Jts_uCg0Sab0L2HsNnohmV";
+    private String imageMediaId = "C7-qsjkj1y_hYs34juMJkwqDmHLC7e_v9ay9EDvmMGq7bQna6Q-COfTpvfi3Y9d1";
 
-    public JSONObject uploadImg(File file) {
+    public JSONObject uploadImg(File file, String url) {
         if (!file.exists() || !file.isFile()) {
             throw new RuntimeException("文件不存在");
         }
-        String url = uploadMaterialUrl.replace(ACCESS_TOKEN, token).replace("TYPE", "image");
 
         StringBuilder sb = new StringBuilder();
         StringBuilder resultJson = new StringBuilder();
@@ -334,7 +338,7 @@ public class WxServiceImpl {
         return conn;
     }
 
-    public JSONObject commUpload(MultipartFile file, String uploadDateStr, String system) {
+    public JSONObject commUpload(MultipartFile file, String uploadDateStr, String system, String url) {
         String basePath = "/root/temp/";
         // 获取文件名称
         String fileName = file.getOriginalFilename();
@@ -360,7 +364,7 @@ public class WxServiceImpl {
         try {
             FileCopyUtils.copy(file.getBytes(), newFile);
             System.out.println(newFile.getPath());
-            JSONObject result = uploadImg(newFile);
+            JSONObject result = uploadImg(newFile, url);
             // 素材上传到微信后删除本地文件
             boolean isDelete = newFile.delete();
             if (!isDelete) {
@@ -374,7 +378,7 @@ public class WxServiceImpl {
 
     public void handleWxMsg(HttpServletRequest request, HttpServletResponse response) {
         Map<String, String> receiverMsg = MessageUtils.parseXml(request);
-        System.out.println("微信发送消息内容: " + receiverMsg);
+        System.out.println("微信发送到此的消息内容: " + receiverMsg);
         String msgType = receiverMsg.get(WxDicts.WX_MSG_TYPE);
         String resStr = "";
         boolean saveUser = false;
@@ -393,16 +397,16 @@ public class WxServiceImpl {
                     resStr = MessageUtils.imageMessageToXml(imageMessage);
                 } else if (m000201.equals(eventKey)) {
                     ArticlesMessage articlesMessage = new ArticlesMessage();
-                    articlesMessage.setArticleCount(1);
                     this.setMsgData(receiverMsg, articlesMessage, WxMsgTypeEnums.WX_MSG_TYPE_NEWS.getMsgType());
+                    List<Articles> articlesList = new ArrayList<>();
                     Articles articles = new Articles();
-                    ArticlesItem item = new ArticlesItem();
-                    item.setTitle("test");
-                    item.setDescription("test");
-                    item.setPicUrl("http://mmbiz.qpic.cn/mmbiz_jpg/ibTxdMwOicibduncxldKmefBCGA10RcJ6y7TicEIiaiaRW9RrjblJc10W7oqluEOcZPFOwCG8mg1WRlpljBMR6dulD8g/0?wx_fmt=jpeg");
-                    item.setUrl("https://www.baidu.com");
-                    articles.setItem(item);
-                    articlesMessage.setArticles(articles);
+                    articles.setTitle("江总牛b");
+                    articles.setDescription("别说话，喊牛b就对了");
+                    articles.setPicUrl("http://mmbiz.qpic.cn/mmbiz_jpg/ibTxdMwOicibdvLDobFa9Y6ac55FoojDXuXkic91vnbBPLJlGEL99sMx8EwTCRzP2GFh9TNYNUsvW33gEy4pDxMl9w/0?wx_fmt=jpeg");
+                    articles.setUrl("https://www.baidu.com/");
+                    articlesList.add(articles);
+                    articlesMessage.setArticles(articlesList);
+                    articlesMessage.setArticleCount(articlesList.size());
                     resStr = MessageUtils.articlesMessageToXml(articlesMessage);
                 } else {
                     TextMessage textMessage = new TextMessage();
@@ -440,7 +444,7 @@ public class WxServiceImpl {
                 resStr = MessageUtils.textMessageToXml(textMessage);
             }
         }
-        System.out.println("被动回复消息内容：\n" + resStr);
+        System.out.println("回复微信的消息内容：\n" + resStr);
         // 设置返回字符集为utf-8
         response.setCharacterEncoding(MessageUtils.DEFAULT_ENCODE);
         try {
@@ -541,6 +545,9 @@ public class WxServiceImpl {
     }
 
     public JSONObject getTemporaryMedia(String mediaId) {
+        if (StringUtils.isEmpty(mediaId)) {
+            throw new ApiException(ApiResult.ERROR, "媒体id不能为空");
+        }
         String url = getTemporaryMediaUrl.replace(ACCESS_TOKEN, token).replace("MEDIA_ID", mediaId);
         return httpsRequest(url, GET, null);
     }

@@ -3,8 +3,8 @@
     <button name="爱在中银" submenu="true">
         <sub_button>
             <item name="世界益游戏" type="click" key="connectWiFi"/>
-            <item name="中银百事通" type="view" key="/info.html"/>
-            <item name="尊享优惠" type="view" key="/promo.html"/>
+            <item name="中银百事通" type="view" url="http://127.0.0.1:7001/#/login"/>
+            <item name="尊享优惠" type="view" url="http://127.0.0.1:7001/#/register"/>
             <item name="卡卡笑优惠" type="click" key="M0001-04"/>
         </sub_button>
     </button>

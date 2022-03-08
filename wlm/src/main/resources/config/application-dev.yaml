@@ -28,6 +28,12 @@ spring:
     properties.mail.smtp.starttls.required: true
     properties.mail.smtp.ssl.enable: true
 
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          username: elasticsearch
+
   # mqtt
   rabbitmq:
     port: 5672
@@ -54,3 +60,13 @@ logging:
 wx:
   appId: wxaf8ba53c06ecdabc
   appSecret: 05586b65b3bf05957bf34fdeb00e7044
+
+project:
+  mq:
+    host: 127.0.0.1
+    port: 11201
+    queue-manager: QM96
+    channel: QM96Server
+    username: wuliming
+    password: 940312
+    receive-timeout: 20000
