@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import index from '@/views/index'
 import login from '@/components/login'
 import register from '@/components/register'
+import wechatIndex from '@/views/wechat/index'
 
 Vue.use(Router)
 
@@ -34,6 +35,14 @@ const router = new Router({
       component: index,
       meta: {
         requireAuth: true
+      }
+    },
+    {
+      path: '/wechat',
+      name: 'wechatIndex',
+      component: wechatIndex,
+      meta: {
+        requireAuth: false
       }
     }
   ]

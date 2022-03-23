@@ -45,7 +45,8 @@ export default {
     roleIndex: () => ({ component: import('@/views/role/index.vue') }),
     menuIndex: () => ({ component: import('@/views/menu/index.vue') }),
     focusUsers: () => ({ component: import('@/views/wx/users/index.vue') }),
-    userSign: () => ({ component: import('@/views/wx/users/signs.vue') })
+    userSign: () => ({ component: import('@/views/wx/users/signs.vue') }),
+    wxMaterialList: () => ({ component: import('@/views/wx/material/list.vue') })
   },
   name: 'HelloWorld',
   data () {

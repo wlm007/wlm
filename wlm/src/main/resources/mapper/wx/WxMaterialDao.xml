@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlm.wlm.dao.wx.WxMaterialDao">
+  <resultMap id="BaseResultMap" type="com.wlm.wlm.model.wx.WxMaterial">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="media_id" jdbcType="VARCHAR" property="mediaId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+  </resultMap>
+  <select id="getMaterialList" resultType="com.wlm.wlm.model.wx.WxMaterial">
+    select id, type, media_id, name, url, update_time
+    from wx_material
+    where type = #{type}
+  </select>
+</mapper>
