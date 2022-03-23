@@ -64,4 +64,12 @@ public class SysUserController {
         sysUserService.deleteUser(id);
         return new ApiResult<>();
     }
+
+    @ApiOperation(value = "更新用户信息")
+    @ApiOperationSupport(author = "wlm", order = 7)
+    @PostMapping("/test")
+    public ApiResult<Object> test(@Valid @RequestBody SysUserUpdateParams params) {
+        sysUserService.updateTest(params);
+        return new ApiResult<>();
+    }
 }

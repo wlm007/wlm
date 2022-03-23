@@ -10,6 +10,7 @@
     </button>
     <button name="王多鱼" submenu="true">
         <sub_button>
+            <item name="程博牛b" type="view" url="http://127.0.0.1:7001/#/wechat"/>
             <item name="江总牛b" type="click" key="M0002_01"/>
         </sub_button>
     </button>

@@ -9,7 +9,6 @@ import com.wlm.wlm.enums.FileEnum;
 import com.wlm.wlm.enums.WxEventEnums;
 import com.wlm.wlm.enums.WxMsgTypeEnums;
 import com.wlm.wlm.model.wx.*;
-import com.wlm.wlm.params.wx.WxMaterialListParams;
 import com.wlm.wlm.util.MessageUtils;
 import com.wlm.wlm.util.StringUtils;
 import com.wlm.wlm.util.WxDicts;
@@ -365,6 +364,7 @@ public class WxServiceImpl {
             FileCopyUtils.copy(file.getBytes(), newFile);
             System.out.println(newFile.getPath());
             JSONObject result = uploadImg(newFile, url);
+            result.put("name", fileName);
             // 素材上传到微信后删除本地文件
             boolean isDelete = newFile.delete();
             if (!isDelete) {
@@ -410,7 +410,7 @@ public class WxServiceImpl {
                     resStr = MessageUtils.articlesMessageToXml(articlesMessage);
                 } else {
                     TextMessage textMessage = new TextMessage();
-                    textMessage.setContent("你好");
+                    textMessage.setContent("你好<a href='https://www.baidu.com' style='color: red'>绑定</a>");
                     this.setMsgData(receiverMsg, textMessage, WxMsgTypeEnums.WX_MSG_TYPE_TEXT.getMsgType());
                     resStr = MessageUtils.textMessageToXml(textMessage);
                 }
@@ -463,15 +463,6 @@ public class WxServiceImpl {
         message.setFromUserName(receiverMsg.get(WxDicts.WX_TO_USER_NAME));
         message.setCreateTime(System.currentTimeMillis());
         message.setMsgType(msgType);
-    }
-
-    public JSONObject getMaterialList(String type) {
-        String url = getMaterialListUrl.replace(ACCESS_TOKEN, token);
-        WxMaterialListParams params = new WxMaterialListParams();
-        params.setType(type);
-        params.setCount(20);
-        params.setOffset(0);
-        return httpsRequest(url, POST, JSON.toJSONString(params));
     }
 
     public JSONObject getTemplateList() {

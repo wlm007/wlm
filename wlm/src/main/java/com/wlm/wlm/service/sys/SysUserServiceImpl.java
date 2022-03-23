@@ -17,6 +17,7 @@ import com.wlm.wlm.params.sysUser.SysUserUpdateParams;
 import com.wlm.wlm.util.JwtUtils;
 import com.wlm.wlm.util.StringUtils;
 import com.wlm.wlm.vo.SysUserVo;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -115,5 +116,21 @@ public class SysUserServiceImpl implements UserDetailsService {
         updateUser.setDeptNo(params.getDeptNo());
         updateUser.setRoleNo(params.getRoleNo());
         sysUserMapper.updateById(updateUser);
+    }
+
+    private SqlSession sqlSession;
+
+    @Autowired
+    public void setSqlSession(SqlSession sqlSession) {
+        this.sqlSession = sqlSession;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateTest(SysUserUpdateParams params) {
+        sqlSession.delete("sysUserTestMapper.deleteTest", params);
+        System.out.println("执行完删除");
+        sqlSession.insert("sysUserTestMapper.insertTest", params);
+        System.out.println("执行完新增");
+        throw new ApiException("事务测试");
     }
 }

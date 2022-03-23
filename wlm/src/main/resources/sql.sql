@@ -62,6 +62,7 @@ insert into wlm.sys_menu values
     (null, 1, 1, '用户管理', 2, 'userIndex')
     ;
 
+# 微信公众号关注用户表
 create table wlm.wx_users (
     id int auto_increment comment '主键',
     subscribe int(10) not null comment '用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息',
@@ -77,6 +78,7 @@ create table wlm.wx_users (
     primary key (id)
 );
 
+# 微信公众号用户标签表
 create table wlm.wx_users_sign
 (
     id    int comment '主键',
@@ -85,9 +87,21 @@ create table wlm.wx_users_sign
     primary key (id)
 );
 
+# 微信公众号用户标签关联表(用户可关联多个标签)
 create table wlm.wx_users_bind_sign (
     id  int auto_increment comment '主键',
     openid varchar(50) not null comment '用户openid',
     tag_id int not null comment '标签id',
+    primary key (id)
+);
+
+# 微信公众号永久素材表
+create table wlm.wx_material (
+    id int auto_increment comment '主键',
+    type varchar(10) comment '素材类型 图片（image）、语音（voice）、视频（video）和缩略图（thumb）',
+    media_id varchar(100) comment '媒体id',
+    name varchar(100) comment '文件名',
+    url varchar(300) comment '文件路径',
+    update_time bigint comment '更新时间',
     primary key (id)
 );

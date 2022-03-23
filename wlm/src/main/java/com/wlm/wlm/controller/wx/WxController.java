@@ -108,21 +108,6 @@ public class WxController {
         return null;
     }
 
-    @ApiOperation(value = "微信永久素材上传")
-    @ApiOperationSupport(author = "wlm", order = 4)
-    @PostMapping("/upload")
-    public JSONObject upload(@RequestParam("file") MultipartFile file) {
-        String url = wxService.getUploadImgUrl().replace(wxService.getACCESS_TOKEN(), wxService.getAccessToken()).replace("TYPE", "image");
-        return wxService.commUpload(file, String.valueOf(System.currentTimeMillis()), "demo", url);
-    }
-
-    @ApiOperation(value = "微信素材列表获取")
-    @ApiOperationSupport(author = "wlm", order = 5)
-    @GetMapping("/get_material_list/{type}")
-    public JSONObject getMaterialList(@PathVariable("type") String type) {
-        return wxService.getMaterialList(type);
-    }
-
     @ApiOperation(value = "发送模板消息")
     @ApiOperationSupport(author = "wlm", order = 6)
     @GetMapping("/send_template")
